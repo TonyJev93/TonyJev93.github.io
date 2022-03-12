@@ -14,3 +14,4 @@ dist
 
 .gridsome.config.js
 .gridsome.server.js
+.idea
