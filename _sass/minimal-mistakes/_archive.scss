@@ -50,6 +50,11 @@
   overflow: hidden;
   text-overflow: ellipsis;
 
+  /* 추가 코드 */
+  a {
+    color: darkblue; // default : blue
+  }
+
   a[rel="permalink"]::before {
     content: '';
     position: absolute;
