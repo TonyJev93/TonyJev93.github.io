@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.2.2">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2022-03-14T02:17:35+09:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Tonyjev’s Blog</title><subtitle>학습을 위한 기술 블로그</subtitle><author><name>Gyewon Jun</name></author><entry><title type="html">[Github Blog] Tips</title><link href="http://localhost:4000/github%20blog/github-blog-tips/" rel="alternate" type="text/html" title="[Github Blog] Tips" /><published>2022-03-14T00:00:00+09:00</published><updated>2022-03-14T01:10:00+09:00</updated><id>http://localhost:4000/github%20blog/github-blog-tips</id><content type="html" xml:base="http://localhost:4000/github%20blog/github-blog-tips/"><![CDATA[<p class="notice--info">깃허브를 이용한 블로그 만들기 관련 Tips</p>
+I"�<p class="notice--info">깃허브를 이용한 블로그 만들기 관련 Tips</p>
 
 <h1 id="post-등록">Post 등록</h1>
 
@@ -180,4 +180,5 @@
 
 <ul>
   <li><a href="https://eona1301.github.io/github_blog/GithubBlog-Posting/">[Github Blog] minimal mistakes - 포스팅 글 써보기</a></li>
-</ul>]]></content><author><name>Gyewon Jun</name></author><category term="Github Blog" /><category term="Github Blog" /><category term="Tip" /><summary type="html"><![CDATA[깃허브를 이용한 블로그 만들기 관련 Tips]]></summary></entry></feed>
+</ul>
+:ET
