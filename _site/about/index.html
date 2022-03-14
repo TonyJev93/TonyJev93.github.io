@@ -9,7 +9,7 @@
 <head>
   <meta charset="utf-8">
 
-<!-- begin _includes/seo.html --><title>About - Tonyjev’s Blog</title>
+<!-- begin _includes/seo.html --><title>About - TonyJev’s Blog</title>
 <meta name="description" content="학습을 위한 기술 블로그">
 
 
@@ -19,7 +19,7 @@
 
 <meta property="og:type" content="website">
 <meta property="og:locale" content="ko_KR">
-<meta property="og:site_name" content="Tonyjev's Blog">
+<meta property="og:site_name" content="TonyJev's Blog">
 <meta property="og:title" content="About">
 <meta property="og:url" content="http://localhost:4000/about/">
 
@@ -67,8 +67,6 @@
 
 
 
-  <link href="https://github.com/TonyJev93" type="application/atom+xml" rel="alternate" title="Tonyjev's Blog Feed">
-
 
 <!-- https://t.co/dKP3o1e -->
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -87,6 +85,14 @@
   <!-- start custom head snippets -->
 
 <!-- insert favicons. use https://realfavicongenerator.net/ -->
+
+<link rel="apple-touch-icon" sizes="180x180" href="/assets/images/logos/tesla/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/assets/images/logos/tesla/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/assets/images/logos/tesla/favicon-16x16.png">
+<link rel="manifest" href="/assets/images/logos/tesla/site.webmanifest">
+<link rel="mask-icon" href="/assets/images/logos/tesla/safari-pinned-tab.svg" color="#5bbad5">
+<meta name="msapplication-TileColor" content="#da532c">
+<meta name="theme-color" content="#ffffff">
 
 <!-- end custom head snippets -->
 
@@ -112,13 +118,20 @@
     <div class="masthead__menu">
       <nav id="site-nav" class="greedy-nav">
         
+          <a class="site-logo" href="/"><img src="/assets/images/logos/tesla/favicon-32x32.png" alt="TonyJev's Blog"></a>
+        
         <a class="site-title" href="/">
-          Tonyjev's Blog
+          TonyJev's Blog
           <span class="site-subtitle">많은 사랑 부탁드립니다. 행복하세요 :)</span>
         </a>
         <ul class="visible-links"><li class="masthead__menu-item">
               <a href="/about/">About</a>
             </li></ul>
+        
+        <button class="search__toggle" type="button">
+          <span class="visually-hidden">Toggle search</span>
+          <i class="fas fa-search"></i>
+        </button>
         
         <button class="greedy-nav__toggle hidden" type="button">
           <span class="visually-hidden">토글 메뉴</span>
@@ -318,7 +331,7 @@
   <li>설명
     <ul>
       <li>내용 : 간병인과 보호자 매칭을 지원해주는 ‘위케어’라는 명칭의 웹/앱 서비스 개발</li>
-      <li>역할 : 어드민 BE/FE 개발 (100%)
+      <li>역할 : 어드민 BE/FE 개발
         <ul>
           <li>Spring Boot 기반 Restful API 서버 개발</li>
           <li>Vue.js 를 이용한 Front-End 개발</li>
@@ -339,7 +352,7 @@
   <li>설명
     <ul>
       <li>내용 : NHN Academy 에서 모집한 부트캠프 수강생들의 결제를 지원하는 브릿지 서버 개발</li>
-      <li>역할 : 설계(100%), 서버개발(25%), 어드민개발(50%)</li>
+      <li>역할 : 설계, 서버개발, 어드민개발</li>
       <li>사용 기술 : Vue.js, Spring Boot, MSA, JPA, Querydsl, JUnit/Spock, MySQL, Docker, Jenkins, <strong>API Composer</strong></li>
     </ul>
   </li>
@@ -380,6 +393,17 @@
 </div>
 
 
+<div class="search-content">
+  <div class="search-content__inner-wrap"><form class="search-content__form" onkeydown="return event.key != 'Enter';" role="search">
+    <label class="sr-only" for="search">
+      Enter your search term...
+    </label>
+    <input type="search" id="search" class="search-input" tabindex="-1" placeholder="검색어를 입력하세요..." />
+  </form>
+  <div id="results" class="results"></div></div>
+
+</div>
+
 
 <div class="page__footer">
   <footer>
@@ -413,11 +437,6 @@
     
 
     
-      <li><a href="https://github.com/TonyJev93">
-<!--        <i class="fas fa-fw fa-rss-square" aria-hidden="true"></i> 피드-->
-      </a>
-      </li>
-    
   </ul>
 </div>
 
@@ -431,6 +450,10 @@
 
 
 
+
+<script src="/assets/js/lunr/lunr.min.js"></script>
+<script src="/assets/js/lunr/lunr-store.js"></script>
+<script src="/assets/js/lunr/lunr-en.js"></script>
 
 
 

@@ -1,77 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.2.2">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2022-03-15T01:40:41+09:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">TonyJev’s Blog</title><subtitle>학습을 위한 기술 블로그</subtitle><author><name>Gyewon Jun</name></author><entry><title type="html">[Github Blog] minimal mistakes - 파비콘(Favicon) 세팅하기</title><link href="http://localhost:4000/github%20blog/github-blog-favicon/" rel="alternate" type="text/html" title="[Github Blog] minimal mistakes - 파비콘(Favicon) 세팅하기" /><published>2022-03-15T00:00:00+09:00</published><updated>2022-03-15T12:35:00+09:00</updated><id>http://localhost:4000/github%20blog/github-blog-favicon</id><content type="html" xml:base="http://localhost:4000/github%20blog/github-blog-favicon/"><![CDATA[<p class="notice--info">깃허브를 이용한 블로그 만들기 관련 Tips : 파비콘(Favicon) 세팅 방법</p>
-
-<h1 id="파비콘favicon-세팅">파비콘(favicon) 세팅</h1>
-
-<h2 id="아이콘-찾기">아이콘 찾기</h2>
-
-<ul>
-  <li>아래 사이트에 접속하여 마음에 드는 Favicon 을 다운로드 받는다.
-    <ul>
-      <li><a href="https://www.flaticon.com/">flaticon</a></li>
-      <li><a href="https://icooon-mono.com/">Icooon-mono</a></li>
-      <li><a href="https://thenounproject.com/">Thenounproject</a></li>
-      <li><a href="https://www.iconfinder.com/">Iconfinder</a></li>
-      <li><a href="https://www.freepik.com/">Freepik</a></li>
-      <li><a href="https://www.freevectors.net/">FreeVectors</a></li>
-    </ul>
-  </li>
-</ul>
-
-<h2 id="아이콘-만들기">아이콘 만들기</h2>
-
-<ul>
-  <li>
-    <p><a href="https://realfavicongenerator.net/">realfavicongenerator</a> 에 접속한다.
-<br />
-<br />
-<img src="https://user-images.githubusercontent.com/53864640/158215212-6599a18c-ae80-47ab-aa13-060b141e69d1.png" alt="image" /></p>
-  </li>
-  <li>
-    <p><code class="language-plaintext highlighter-rouge">Select Your Favicon image</code>버튼을 클릭 후 사용할 favicon 파일을 선택하여 업로드 한다.</p>
-  </li>
-</ul>
-
-<p><br /></p>
-
-<p><img src="https://user-images.githubusercontent.com/53864640/158215651-151e9060-e379-4a91-838c-9e435cae1f0b.png" alt="image" /></p>
-
-<ul>
-  <li>업로드 후 화면 제일 하단에 내려가 <code class="language-plaintext highlighter-rouge">Generate your Favicons and HTML code</code> 버튼을 클릭한다.</li>
-</ul>
-
-<p><br /></p>
-
-<p><img src="https://user-images.githubusercontent.com/53864640/158210875-7d13cf8f-a02c-4444-9a59-7b4ee5af0f0c.png" alt="image" /></p>
-
-<ul>
-  <li><code class="language-plaintext highlighter-rouge">Favicon package</code> 버튼을 클릭하여 <code class="language-plaintext highlighter-rouge">zip</code> 파일을 다운받는다.</li>
-</ul>
-
-<h2 id="적용하기">적용하기</h2>
-
-<ul>
-  <li>다운받은 <code class="language-plaintext highlighter-rouge">zip</code> 파일을 압축 해제한 이후 내부에 있는 파일들을 전부 <code class="language-plaintext highlighter-rouge">assets/images/logos</code>하위로 복사한다.</li>
-  <li><strong>custom.html</strong> 파일을 아래와 같이 수정 (해당 코드는 favicon 생성 직후 사이트에 나타나는 소스이다.)</li>
-</ul>
-
-<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;link</span> <span class="na">rel=</span><span class="s">"apple-touch-icon"</span> <span class="na">sizes=</span><span class="s">"180x180"</span> <span class="na">href=</span><span class="s">"/apple-touch-icon.png"</span><span class="nt">&gt;</span>
-<span class="nt">&lt;link</span> <span class="na">rel=</span><span class="s">"icon"</span> <span class="na">type=</span><span class="s">"image/png"</span> <span class="na">sizes=</span><span class="s">"32x32"</span> <span class="na">href=</span><span class="s">"/favicon-32x32.png"</span><span class="nt">&gt;</span>
-<span class="nt">&lt;link</span> <span class="na">rel=</span><span class="s">"icon"</span> <span class="na">type=</span><span class="s">"image/png"</span> <span class="na">sizes=</span><span class="s">"16x16"</span> <span class="na">href=</span><span class="s">"/favicon-16x16.png"</span><span class="nt">&gt;</span>
-<span class="nt">&lt;link</span> <span class="na">rel=</span><span class="s">"manifest"</span> <span class="na">href=</span><span class="s">"/site.webmanifest"</span><span class="nt">&gt;</span>
-<span class="nt">&lt;link</span> <span class="na">rel=</span><span class="s">"mask-icon"</span> <span class="na">href=</span><span class="s">"/safari-pinned-tab.svg"</span> <span class="na">color=</span><span class="s">"#5bbad5"</span><span class="nt">&gt;</span>
-<span class="nt">&lt;meta</span> <span class="na">name=</span><span class="s">"msapplication-TileColor"</span> <span class="na">content=</span><span class="s">"#da532c"</span><span class="nt">&gt;</span>
-<span class="nt">&lt;meta</span> <span class="na">name=</span><span class="s">"theme-color"</span> <span class="na">content=</span><span class="s">"#ffffff"</span><span class="nt">&gt;</span>
-</code></pre></div></div>
-
-<ul>
-  <li>이후, <code class="language-plaintext highlighter-rouge">href=</code>에 해당하는 파일 경로만 각자 저장한 파일 위치에 맞게 수정하면 된다.</li>
-</ul>
-
-<h1 id="참고">참고</h1>
-
-<ul>
-  <li><a href="https://eona1301.github.io/github_blog/GithubBlog-Favicon/">[Github Blog] minimal mistakes - 파비콘(Favicon) 세팅하기</a></li>
-</ul>]]></content><author><name>Gyewon Jun</name></author><category term="Github Blog" /><category term="Github Blog" /><category term="minimal mistakes" /><category term="Tip" /><summary type="html"><![CDATA[깃허브를 이용한 블로그 만들기 관련 Tips : 파비콘(Favicon) 세팅 방법]]></summary></entry><entry><title type="html">[Github Blog] minimal mistakes - Post 등록</title><link href="http://localhost:4000/github%20blog/github-blog-post-post/" rel="alternate" type="text/html" title="[Github Blog] minimal mistakes - Post 등록" /><published>2022-03-14T00:00:00+09:00</published><updated>2022-03-15T12:35:00+09:00</updated><id>http://localhost:4000/github%20blog/github-blog-post-post</id><content type="html" xml:base="http://localhost:4000/github%20blog/github-blog-post-post/"><![CDATA[<p class="notice--info">깃허브를 이용한 블로그 만들기 관련 Tips : 포스트 등록 방법</p>
+I"<p class="notice--info">깃허브를 이용한 블로그 만들기 관련 Tips : 포스트 등록 방법</p>
 
 <h1 id="post-등록">Post 등록</h1>
 
@@ -253,4 +180,5 @@
 
 <ul>
   <li><a href="https://eona1301.github.io/github_blog/GithubBlog-Posting/">[Github Blog] minimal mistakes - 포스팅 글 써보기</a></li>
-</ul>]]></content><author><name>Gyewon Jun</name></author><category term="Github Blog" /><category term="Github Blog" /><category term="minimal mistakes" /><category term="Tip" /><summary type="html"><![CDATA[깃허브를 이용한 블로그 만들기 관련 Tips : 포스트 등록 방법]]></summary></entry></feed>
+</ul>
+:ET
