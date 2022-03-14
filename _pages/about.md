@@ -1,10 +1,13 @@
 ---
 permalink: /about/
-title: "About"
+title: "ABOUT"
 toc: true
 toc_sticky: true
 toc_label: "목차"
 ---
+
+About : 저에 대해 소개드립니다. :)
+{: .notice--info}
 
 # 자기소개
 
