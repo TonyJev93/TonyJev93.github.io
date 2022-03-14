@@ -1,6 +1,6 @@
 ---
-title: "[Github Blog] Tips"
-last_modified_at: 2022-03-14T01:10:00+09:00
+title: "[Github Blog] Post 등록"
+last_modified_at: 2022-03-15T12:35:00+09:00
 categories:
     - Github Blog
 tags:
@@ -8,7 +8,7 @@ tags:
     - Tip
 toc: true
 toc_sticky: true
-toc_label: "Tips"
+toc_label: "목차"
 ---
 
 깃허브를 이용한 블로그 만들기 관련 Tips
