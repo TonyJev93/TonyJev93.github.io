@@ -1,17 +1,29 @@
-# OS generated files #
-######################
-*.log
-.cache
-.DS_Store
-.DS_Store?
+# Vim
+*~
+*.sw[p_]
 
-src/.temp
+# Sublime Text
+*.sublime-project
+*.sublime-workspace
+
+# Ruby Gem
+*.gem
+.bundle
+Gemfile.lock
+**/vendor/bundle
+
+# Node.js and NPM
 node_modules
-node_modules/*
-dist
-.env
-.env.*
+npm-debug.log*
+package-lock.json
+codekit-config.json
 
-.gridsome.config.js
-.gridsome.server.js
-.idea
+# macOS
+.DS_Store
+
+# Jekyll generated files
+.jekyll-cache
+.jekyll-metadata
+.sass-cache
+_asset_bundler_cache
+_site
