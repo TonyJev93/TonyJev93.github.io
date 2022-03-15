@@ -7,6 +7,7 @@ tags:
     - Github Blog
     - minimal mistakes
     - Tip
+    - Google Analytics
 toc: true
 toc_sticky: true
 toc_label: "목차"
