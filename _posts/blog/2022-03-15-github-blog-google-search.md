@@ -17,7 +17,7 @@ toc_label: "목차"
 
 # 구글 검색창 노출
 
-## Google search 접속 및 가입
+## 구글 검색 접속 및 가입
 
 [Google search Console](https://search.google.com/search-console/about) 에 접속한다.
 
@@ -41,42 +41,10 @@ toc_label: "목차"
 
 ## 크롤링 허용
 
-### sitemap.xml 파일 생성
+### sitemap.xml 파일생성
 
-```
----
-layout: null
----
-
-<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd"
-        xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-    {% for post in site.posts %}
-    <url>
-        <loc>{{ site.url }}{{ post.url }}</loc>
-        {% if post.lastmod == null %}
-        <lastmod>{{ post.date | date_to_xmlschema }}</lastmod>
-        {% else %}
-        <lastmod>{{ post.lastmod | date_to_xmlschema }}</lastmod>
-        {% endif %}
-
-        {% if post.sitemap.changefreq == null %}
-        <changefreq>weekly</changefreq>
-        {% else %}
-        <changefreq>{{ post.sitemap.changefreq }}</changefreq>
-        {% endif %}
-
-        {% if post.sitemap.priority == null %}
-        <priority>0.5</priority>
-        {% else %}
-        <priority>{{ post.sitemap.priority }}</priority>
-        {% endif %}
-
-    </url>
-    {% endfor %}
-</urlset>
-```
+<script src="https://gist.github.com/eona1301/0917f0d1fc12314ef3f73fd5fc3b50f9.js"></script>
+(_소스코드 출처 : [https://gist.github.com/eona1301](https://gist.github.com/eona1301/0917f0d1fc12314ef3f73fd5fc3b50f9)_)
 
 `sitemap.xml 파일`을 `google HTML 파일`과 동일한 위치(Root 위치)에 생성하면 된다. 이를 통해, Google 크롤러가 주기적으로 블로그의 URL을 체크할 수 있게 된다.
 
@@ -84,7 +52,7 @@ layout: null
 
 [http://127.0.0.1:4000/sitemap.xml](http://127.0.0.1:4000/sitemap.xml)에 접속하였을 때 위와 같이 나타난다면 정상적으로 처리된 것이다.
 
-## robots.txt 만들기
+### robots.txt 만들기
 
 ```text
 User-agent: *
@@ -92,8 +60,24 @@ Allow: /
 
 Sitemap: https://tonyjev93.github.io/sitemap.xml
 ```
+위와 같이 `robots.txt` 파일을 Root 경로에 생성해주자.
+
 
 이제 접근하는 크롤러는 robots.txt를 보고 접근하고자 하는 sitemap의 위치를 확인하고, 제한을 확인하여 본래의 웹사이트로 가져가게 됩니다. Allow에 본인이 원하는 정보만 입력하거나 제한을 두고싶은 내용을 입력하면 크롤러가 확인하여 진행해준다.
+
+
+### sitemap 등록
+
+`소유권 확인`을 마치기 위해서 `git push`를 통해 `google HTML 파일`을 블로그에 업로드 한다. 이 후 `소유권 확인`이 완료되면, 
+
+![image](https://user-images.githubusercontent.com/53864640/158450883-ac653ce5-523b-4b77-9719-dfa39a95d34b.png){: .align-center}
+
+위와 같이 `sitemap.xml`을 제출한다.
+
+![image](https://user-images.githubusercontent.com/53864640/158451367-c9f6205f-a59d-4ab1-bc7c-a15df19d9745.png){: .align-center}
+
+제출 후 위와 같이 `가져올 수 없음`이라고 나타나지만, 당황하지 말고 시간이 지나면 정상적으로 처리될 것이다...
+
 
 
 
