@@ -58,4 +58,10 @@ GoF 란?
 |                                                                                                                                                |                                                                                                                           | 책임 연쇄 패턴(Chain of Responsibility Pattern) | 
 |                                                                                                                                                |                                                                                                                           | 스트래티지 패턴(Strategy Pattern)               | 
 |                                                                                                                                                |                                                                                                                           | 템플릿 메서드 패턴(Template Method Pattern)      | 
-|                                                                                                                                                |                                                                                                                           | 비지터 패턴(Visitor Pattern)                  | 
+|                                                                                                                                                |                                                                                                                           | 비지터 패턴(Visitor Pattern)                  |
+
+
+## ETC
+
+Marker interface pattern
+: Serializable, Cloneable - 클래스 명만으로 파악가능하도록 하는 패턴 

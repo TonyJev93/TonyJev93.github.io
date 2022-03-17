@@ -13,7 +13,7 @@ toc_label: "목차"
 
 ## _2022. 03. ~_
 
-![image](https://user-images.githubusercontent.com/53864640/158644865-d5e1eb82-7224-427f-8c54-c0c51757ee5e.png){: .align-center}
+![image](https://user-images.githubusercontent.com/53864640/158804781-0274e9b1-c5de-4bdc-be91-f2265e89bb41.png){: .align-center}
 
 ## 평일
 평일에는 기초 다지기를 위해 **요일별 도서를 지정**하고, **공부한 내용을 정리하여 업로드 하는것을 목표**로 한다. <br>
