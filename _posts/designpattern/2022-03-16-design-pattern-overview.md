@@ -63,5 +63,5 @@ GoF 란?
 
 ## ETC
 
-Marker interface pattern
+[Marker interface pattern](https://tonyjev93.github.io/design%20pattern/design-pattern-marker-interface)
 : Serializable, Cloneable - 클래스 명만으로 파악가능하도록 하는 패턴 
