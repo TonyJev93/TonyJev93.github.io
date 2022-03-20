@@ -45,12 +45,12 @@ toc_label: "목차"
 ### Back-End
 
 - [ ] Design Pattern (ing)
-- [ ] Clean Code
+- [ ] Clean Code (ing)
 - [ ] 리팩토링
 - [ ] Database 관련
 
 ### ETC
-- [ ] Programmatic Programmer
+- [ ] Programmatic Programmer (ing)
 - [ ] 개발 원칙 (~~OOP~~, ~~3대 원칙~~, ...)
 
 ## 역량 강화
