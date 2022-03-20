@@ -44,18 +44,18 @@ toc_label: "목차"
 
 ### Back-End
 
-- [ ] Design Pattern (ing)
-- [ ] Clean Code (ing)
+- [ ] **Design Pattern (ing)**
+- [ ] **Clean Code (ing)**
 - [ ] 리팩토링
 - [ ] Database 관련
 
 ### ETC
-- [ ] Programmatic Programmer (ing)
+- [ ] **Programmatic Programmer (ing)**
 - [ ] 개발 원칙 (~~OOP~~, ~~3대 원칙~~, ...)
 
 ## 역량 강화
 
-- [ ] DDD (ing)
+- [ ] **DDD (ing)**
 - [ ] MSA
 - [ ] Clean Architecture
 
