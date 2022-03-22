@@ -1,6 +1,6 @@
 ---
 title: "[Front End] 기초부터 완성까지 - 01장. 프런트엔드 개발이란?"
-last_modified_at: 2022-03-18T21:00:00+09:00
+last_modified_at: 2022-03-22T22:00:00+09:00
 categories:
     - Front End
     - 기초부터 완성까지, 프런트엔드
