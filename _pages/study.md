@@ -38,9 +38,7 @@ toc_label: "목차"
 
 ### Front-End
 
-- [ ] html
-- [ ] javascript
-- [ ] css
+- [ ] **기초부터 완성까지, 프런트엔드 (ing)**
 
 ### Back-End
 
