@@ -1,6 +1,6 @@
 ---
 title: "[DDD] 도메인 주도 설계 - 04. 도메인의 격리"
-last_modified_at: 2022-03-26T17:00:00+09:00
+last_modified_at: 2022-03-26T19:00:00+09:00
 categories:
     - Architecture
     - DDD
