@@ -104,7 +104,7 @@ analytics:
 author:
   name             : "Gyewon Jun"
   avatar           : "https://user-images.githubusercontent.com/53864640/158069502-9512a068-ae12-4302-a35d-375bd8e8d846.jpeg" # path of avatar image, e.g. "/assets/images/bio-photo.jpg"
-  bio              : "학습 내용을 기록하는 기술 블로그"
+  bio              : "학습 내용을 기록하는 기술 블로그<br>(Start : 2022. 03. 14. ~)"
   location         : "Gyeonggi-do, Korea"
   email            :
   links:
