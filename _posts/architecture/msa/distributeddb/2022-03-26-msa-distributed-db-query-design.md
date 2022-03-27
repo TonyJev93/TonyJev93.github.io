@@ -55,7 +55,7 @@ MSA : 분산 DB 환경에서의 조회를 위한 설계 방법을 알아보자.
 ### 마이크로서비스 간 독립 DB 사용
 
 ![img_3](https://user-images.githubusercontent.com/53864640/160266038-37d96b07-3c66-42b9-be12-e8e5f825920d.png){: .align-center}
-_- [그림 출처](https://waspro.tistory.com/724_)_
+_- [그림 출처](https://waspro.tistory.com/724)_
 {: .text-center}
 
 - **특징**
@@ -81,7 +81,7 @@ _- [그림 출처](https://waspro.tistory.com/724_)_
 
 ![img](https://user-images.githubusercontent.com/53864640/160266034-350a829e-a44d-476c-8d9f-3c9b834acee6.png){: .align-center}
 **타 서비스 데이터소스에 직접 접근하는 형태**<br>
-_- [그림 출처](https://waspro.tistory.com/724_)_
+_- [그림 출처](https://waspro.tistory.com/724)_
 {: .text-center}
 
 <br>
@@ -92,7 +92,7 @@ _- [그림 출처](https://waspro.tistory.com/724_)_
 
 ![img_1](https://user-images.githubusercontent.com/53864640/160266035-4620159a-7d04-4654-8c56-1326631332c9.png){: .align-center}
 **모든 외부서비스를 위한 조회용 View 스키마 제공하는 형태**
-<br>_- [그림 출처](https://waspro.tistory.com/724_)_
+<br>_- [그림 출처](https://waspro.tistory.com/724)_
 {: .text-center}
 
 <br>
@@ -123,7 +123,7 @@ _- [그림 출처](https://waspro.tistory.com/724_)_
 ### 공통 마이크로서비스 활용
 
 ![img_2](https://user-images.githubusercontent.com/53864640/160266036-d7bd30a9-f62d-45ee-9ad4-ffbd82dc41fc.png){: .align-center}
-_- [그림 출처](https://waspro.tistory.com/724_)_
+_- [그림 출처](https://waspro.tistory.com/724)_
 {: .text-center}
 
 - 공통 서비스를 별도로 구현하여 공유 데이터(Shared Data)를 관리하는 방식
@@ -139,7 +139,7 @@ _- [그림 출처](https://waspro.tistory.com/724_)_
 ### ReadOnly DB 활용
 
 ![img_4](https://user-images.githubusercontent.com/53864640/160266039-dc2089ed-7b0e-447a-841d-49a1b00e3b32.png){: .align-center}
-_- [그림 출처](https://waspro.tistory.com/724_)_
+_- [그림 출처](https://waspro.tistory.com/724)_
 {: .text-center}
 
 - 타 마이크로서비스에 CUD 하는 경우에는 API 호출, 조회하는 경우 ReadOnly DB 이용하는 방식
