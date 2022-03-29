@@ -18,16 +18,16 @@ toc_label: "목차"
 MSA : 회사 프로젝트 내에 분산 DB 환경에서의 API 조합기를 적용하기 위한 과정을 담아보았다. 
 {: .notice--info}
 
-# 목차
+# 목차재
 
-1. [현제 상황](#1-현제-상황)
+1. [현재 상황](#1-현재-상황)
     - 설계 의도
-    - 현제 프로젝트 구조
+    - 현재 프로젝트 구조
 2. [직면한 문제](#2-직면한-문제)
 3. [해결 방법](#3-해결-방법)
 4. [해결 과정](#4-해결-과정)
 
-# 1. 현제 상황
+# 1. 현재 상황
 
 ## - 설계 의도
 
@@ -35,7 +35,7 @@ MSA : 회사 프로젝트 내에 분산 DB 환경에서의 API 조합기를 적�
 - MSA를 고려한 설계 - 추 후 도메인 별 Micro Service 분리 가능성 고려
 - 각 도메인 간의 낮은 의존성, 높은 응집도 유지
 
-## - 현제 프로젝트 구조
+## - 현재 프로젝트 구조
 
 - [Onion Architecture](https://tonyjev93.github.io/architecture/onion%20architecture/onion-architecture/) 참고
 - 크게 Core Module, Service Modules 로 구성
@@ -109,7 +109,7 @@ MSA : 회사 프로젝트 내에 분산 DB 환경에서의 API 조합기를 적�
 
 - `방법 1 : API 조합 패턴` 선택
     - 선택 이유
-        - 현제 진행중인 프로젝트의 규모는 트래픽이 적고, 데이터양이 많지 않음.
+        - 현재 진행중인 프로젝트의 규모는 트래픽이 적고, 데이터양이 많지 않음.
         - CQRS 적용을 위해 요구되는 infra 환경 구축(메시지큐 적용, 이벤트 기반 통신)은 오버엔지니어링 이라고 판단 됨. (CQRS 는 성능 향상에 포커스가 있다고 생각함.)
         - 데이터의 양이 많지 않다는 점에서 API Composition 의 활용의 단점인 `In-memory join`의 성능 저하는 커버가 됨
         - `Service Layer` 대신 `Infrastructure Layer(외부 API)`를 호출 한다는 점에서 기존 구조에서 변화가 크지 않음.
@@ -156,7 +156,7 @@ MSA : 회사 프로젝트 내에 분산 DB 환경에서의 API 조합기를 적�
 ![img_2](https://user-images.githubusercontent.com/53864640/160266804-dbb4bc59-8033-4539-aae9-554ea13d46c2.png){: .align-center}
 
 - API Composer 를 `Core Module` 내에 구현
-    - 현제 모든 도메인에 대한 데이터가 동일 DB 내에 존재하기 때문에 `Core Module` 내에 API Composer 을 구현하여 외부 통신을 최소화 하여 개발 편의성을 높힌다.
+    - 현재 모든 도메인에 대한 데이터가 동일 DB 내에 존재하기 때문에 `Core Module` 내에 API Composer 을 구현하여 외부 통신을 최소화 하여 개발 편의성을 높힌다.
 
 ![img_1](https://user-images.githubusercontent.com/53864640/160266803-c32b5097-ee29-46ee-8752-03eeb0a87ae4.png){: .align-center}
 
@@ -164,7 +164,7 @@ MSA : 회사 프로젝트 내에 분산 DB 환경에서의 API 조합기를 적�
 - `API Composer Client` 인터페이스를 통신하므로서 `클라이언트`로부터 `API Composer` 구현체의 의존성을 분리할 수 있다.
 - 이를 통해 `API Composer`의 구현 자유도가 높아진다.
 
-## 현제 구도의 한계
+## 현재 구도의 한계
 
 - 단일 DB 사용
 
