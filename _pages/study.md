@@ -48,7 +48,7 @@ toc_label: "목차"
 - [ ] Database 관련
 
 ### ETC
-- [ ] **Programmatic Programmer (ing)**
+- [ ] **Pragmatic Programmer (ing)**
 - [ ] 개발 원칙 (~~OOP~~, ~~3대 원칙~~, ...)
 
 ## 역량 강화
