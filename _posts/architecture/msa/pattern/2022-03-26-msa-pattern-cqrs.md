@@ -72,7 +72,7 @@ _- [그림 출처](http://auconsil.blogspot.com/2013/08/cqrs-command-query-respo
 _- [그림 출처](https://kariera.future-processing.pl/blog/cqrs-simple-architecture)_
 {: .text-center}
 
-- 이벤트 소싱 적용 - [이벤트 소싱이란?](https://tonyjev93.github.io/architecture/msa/msa-pattern-event-sourcing/)
+- 이벤트 소싱 적용 - [이벤트 소싱이란?](/architecture/msa/msa-pattern-event-sourcing/)
 - 이벤트 소싱의 이벤트 스트림은 오직 INSERT 만 가능하고(Command), 필요 시점에 구체화 단계를 통해 조회(Query) 데이터가 생성된다는 관점에서 CQRS 의 모델 분리 관점에 잘 맞기 때문에 주로
   선택한다.
 - CQRS 패턴에 이벤트 소싱은 필수가 아니지만, 이벤트 소싱에 CQRS 는 필수

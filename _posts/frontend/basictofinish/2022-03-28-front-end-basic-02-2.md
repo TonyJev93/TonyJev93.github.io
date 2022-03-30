@@ -362,4 +362,4 @@ flex container는 flex-flow, flex-direction을 기준으로 배치된다.
 : cross-start, cross-end, cross-size 존재
 : 주축의 방향이 수평이라면 교차 축의 방향은 수직 & corss-size == flex container 높이
 
-[⬅️ 기초부터 완성까지, 프런트엔드 목차보기](https://tonyjev93.github.io/front%20end/기초부터%20완성까지,%20프런트엔드/front-end-basic-00-overview/)
+[⬅️ 기초부터 완성까지, 프런트엔드 목차보기](/front%20end/기초부터%20완성까지,%20프런트엔드/front-end-basic-00-overview/)

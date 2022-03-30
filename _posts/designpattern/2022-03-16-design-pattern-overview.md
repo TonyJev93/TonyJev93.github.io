@@ -48,11 +48,11 @@ GoF 란?
 
 |                                                                                                                     생성 패턴(Creational Patterns) | 구조 패턴(Structural Patterns)                                                                             | 행위 패턴(Behavioral Pattern)                |
 |-----------------------------------------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------|------------------------------------------|
-|                                                                                                                      싱글톤 패턴(Singleton Pattern) | [어댑터 패턴(Adapter Pattern)](https://tonyjev93.github.io/design%20pattern/design-pattern-adapter/)        | 커맨드 패턴(Command Pattern)                  |
-|                            [추상팩토리 패턴(Abstract Factory Pattern)](https://tonyjev93.github.io/design%20pattern/design-pattern-abstract-factory/) | [브리지 패턴(Bridge Pattern)](https://tonyjev93.github.io/design%20pattern/design-pattern-bridge/)                                     | 인터프리터 패턴(Interpreter Pattern)            |
-|                                                                                                                         빌더 패턴(Builder Pattern) | [컴퍼지트 패턴(Composite Pattern)](https://tonyjev93.github.io/design%20pattern/design-pattern-composition/) | 이터레이터 패턴(Iterator Pattern)               |
-|                              [팩토리 메서드 패턴(Factory Method Pattern)](https://tonyjev93.github.io/design%20pattern/design-pattern-factory-method/) | 데코레이터 패턴(Decoratior Pattern)                                                                           | 미디에이터 패턴(Mediator Pattern)               |
-|                                          [프로토타입 패턴(Prototype Pattern)](https://tonyjev93.github.io/design%20pattern/design-pattern-prototype/) | [퍼사드 패턴(Facade Pattern)](https://tonyjev93.github.io/design%20pattern/design-pattern-facade/)          | 메멘토 패턴(Memento Pattern)                  |
+|                                                                                                                      싱글톤 패턴(Singleton Pattern) | [어댑터 패턴(Adapter Pattern)](/design%20pattern/design-pattern-adapter/)        | 커맨드 패턴(Command Pattern)                  |
+|                            [추상팩토리 패턴(Abstract Factory Pattern)](/design%20pattern/design-pattern-abstract-factory/) | [브리지 패턴(Bridge Pattern)](/design%20pattern/design-pattern-bridge/)                                     | 인터프리터 패턴(Interpreter Pattern)            |
+|                                                                                                                         빌더 패턴(Builder Pattern) | [컴퍼지트 패턴(Composite Pattern)](/design%20pattern/design-pattern-composition/) | 이터레이터 패턴(Iterator Pattern)               |
+|                              [팩토리 메서드 패턴(Factory Method Pattern)](/design%20pattern/design-pattern-factory-method/) | 데코레이터 패턴(Decoratior Pattern)                                                                           | 미디에이터 패턴(Mediator Pattern)               |
+|                                          [프로토타입 패턴(Prototype Pattern)](/design%20pattern/design-pattern-prototype/) | [퍼사드 패턴(Facade Pattern)](/design%20pattern/design-pattern-facade/)          | 메멘토 패턴(Memento Pattern)                  |
 |                                                                                                                                                | 플라이웨이트 패턴(Flyweight Pattern)                                                                           | 옵저버 패턴(Observer Pattern)                 |
 |                                                                                                                                                | 프록시 패턴(Proxy Pattern)                                                                                  | 스테이트 패턴(State Pattern)                   |
 |                                                                                                                                                |                                                                                                        | 책임 연쇄 패턴(Chain of Responsibility Pattern) | 
@@ -63,5 +63,5 @@ GoF 란?
 
 ## ETC
 
-[Marker interface pattern](https://tonyjev93.github.io/design%20pattern/design-pattern-marker-interface)
+[Marker interface pattern](/design%20pattern/design-pattern-marker-interface)
 : Serializable, Cloneable - 클래스 명만으로 파악가능하도록 하는 패턴 

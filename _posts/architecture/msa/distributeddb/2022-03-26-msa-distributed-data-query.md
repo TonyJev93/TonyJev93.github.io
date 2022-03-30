@@ -60,7 +60,7 @@ _- [그림 출처](https://taes-k.github.io/2020/11/22/msa-5/_)_
 
 ## CQRS 패턴
 
-- [CQRS 란?](https://tonyjev93.github.io/architecture/msa/msa-pattern-cqrs/)
+- [CQRS 란?](/architecture/msa/msa-pattern-cqrs/)
 - `API 조합 패턴`의 경우 매번 호출할 때 마다 여러 서비스들로부터 데이터를 가져와 조합하면서 성능상의 이슈나 복잡한 데이터 조합 사용의 어려움이 발생
 - `CQRS`는 조합이 필요한 데이터들을 DB 또는 ES 등의 데이터저장소에 **미리 구성해두고 사용**하기 때문에 해당 이슈를 해결할 수 있다.
 

@@ -313,6 +313,6 @@ HTML에 대한 기본적인 지식을 공부해보았다. 처음에는 알고있
   display: flex;
   justify-content: space-between;
 ">
-<a href="https://tonyjev93.github.io/front%20end/기초부터%20완성까지,%20프런트엔드/front-end-basic-00-overview/">⬅️ 기초부터 완성까지, 프런트엔드 목차보기</a>
-<a href="https://tonyjev93.github.io/front%20end/기초부터%20완성까지,%20프런트엔드/front-end-basic-02-2/">2장. HTML과 CSS (2) 보러가기 ➡️️</a>
+<a href="/front%20end/기초부터%20완성까지,%20프런트엔드/front-end-basic-00-overview/">⬅️ 기초부터 완성까지, 프런트엔드 목차보기</a>
+<a href="/front%20end/기초부터%20완성까지,%20프런트엔드/front-end-basic-02-2/">2장. HTML과 CSS (2) 보러가기 ➡️️</a>
 </div>

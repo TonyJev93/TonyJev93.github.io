@@ -46,8 +46,8 @@ _- [그림 출처](https://microservices.io/patterns/data/api-composition.html)_
 
 ### 관련 패턴들
 
-- [분산 DB 설계](https://tonyjev93.github.io/architecture/msa/msa-distributed-db-query-design)
-- [CQRS 패턴](https://tonyjev93.github.io/architecture/msa/msa-pattern-cqrs/)
+- [분산 DB 설계](/architecture/msa/msa-distributed-db-query-design)
+- [CQRS 패턴](/architecture/msa/msa-pattern-cqrs/)
 
 ## 참고
 

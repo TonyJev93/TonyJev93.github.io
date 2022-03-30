@@ -18,7 +18,7 @@ toc_label: "목차"
 
 | 목차                                                                                          |
 |:--------------------------------------------------------------------------------------------|
-| [1장. 실용주의 철학](https://tonyjev93.github.io/software%20engineering/the%20pragmatic%20programmer/pragmatic-programmer-01/) |
+| [1장. 실용주의 철학](/software%20engineering/the%20pragmatic%20programmer/pragmatic-programmer-01/) |
 | 2장. 실용주의 접근법                                                                                |
 | 3장. 기본적인 도구                                                                                 |
 | 4장. 실용주의 편집증                                                                                |

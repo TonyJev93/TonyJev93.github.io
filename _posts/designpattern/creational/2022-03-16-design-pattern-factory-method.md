@@ -105,3 +105,5 @@ toc_label: "목차"
 
 - 처음에는 느낌이 애매했는데 생각을 정리하면서 어떻게 사용할지 고민하다보니, 잘 찾아보면 은근히 사용할 만한 구석이 있을 것 같다.
 - `static Factory Method` 와 유사점이 많아 보이는데, `static Factory Method`가 너무 많아진다면 `interface`로 추출하는 것도 고려해볼만 할 것 같다.
+
+[⬅️ 디자인패턴 목차보기](/design%20pattern/design-pattern-overview/)

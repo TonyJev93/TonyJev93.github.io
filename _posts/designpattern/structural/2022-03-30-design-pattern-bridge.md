@@ -175,3 +175,11 @@ class BridgePattern {
 그리고 해당 패턴은 메서드 계의 팩토리 패턴이지 않나 생각이 들었다.<br>
 같은 성질의 다양한 객체를 팩토리를 통해 제공하듯, 같은 성질의 다양한 메서드(기능)를 Bridge를 통해 제공한다는 점에서 큰 맥락에서는 유사하다는 생각을 해보았다.
 {: .notice--primary}
+
+<br>
+
+# 참고
+
+- [Wiki - 브리지 패턴](https://ko.wikipedia.org/wiki/%EB%B8%8C%EB%A6%AC%EC%A7%80_%ED%8C%A8%ED%84%B4)
+
+[⬅️ 디자인패턴 목차보기](/design%20pattern/design-pattern-overview/)

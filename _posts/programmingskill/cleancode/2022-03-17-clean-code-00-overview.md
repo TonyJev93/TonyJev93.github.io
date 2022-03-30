@@ -20,7 +20,7 @@ toc_label: "목차"
 
 | 목차                                                                                        |
 |:------------------------------------------------------------------------------------------|
-| [1장. 깨끗한 코드](https://tonyjev93.github.io/programming%20skill/clean%20code/clean-code-01/) |
+| [1장. 깨끗한 코드](/programming%20skill/clean%20code/clean-code-01/) |
 | 2장. 의미 있는 이름                                                                              |
 | 3장. 함수                                                                                    |
 | 4장. 주석                                                                                    |

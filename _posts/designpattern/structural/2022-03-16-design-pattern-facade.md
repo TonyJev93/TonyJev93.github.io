@@ -89,3 +89,5 @@ toc_label: "목차"
 
 - [Design Patterns - Facade Pattern](https://www.tutorialspoint.com/design_pattern/facade_pattern.htm)
 - [퍼사드 패턴(Facade Pattern)이란?](https://live-everyday.tistory.com/210)
+
+[⬅️ 디자인패턴 목차보기](/design%20pattern/design-pattern-overview/)

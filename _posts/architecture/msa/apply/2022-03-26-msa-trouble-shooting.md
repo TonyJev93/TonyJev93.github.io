@@ -37,7 +37,7 @@ MSA : 회사 프로젝트 내에 분산 DB 환경에서의 API 조합기를 적�
 
 ## - 현재 프로젝트 구조
 
-- [Onion Architecture](https://tonyjev93.github.io/architecture/onion%20architecture/onion-architecture/) 참고
+- [Onion Architecture](/architecture/onion%20architecture/onion-architecture/) 참고
 - 크게 Core Module, Service Modules 로 구성
     - Core Module
         - 모든 Application 의 도메인을 관리 (Domain Layer)
@@ -81,14 +81,14 @@ MSA : 회사 프로젝트 내에 분산 DB 환경에서의 API 조합기를 적�
 
 ## 참고
 
-- [분산 데이터 쿼리하기](https://tonyjev93.github.io/architecture/msa/msa-distributed-data-query/)
-    - [CQRS](https://tonyjev93.github.io/architecture/msa/msa-pattern-cqrs/)
-- [분산 DB 조회 설계](https://tonyjev93.github.io/architecture/msa/msa-distributed-db-query-design/)
+- [분산 데이터 쿼리하기](/architecture/msa/msa-distributed-data-query/)
+    - [CQRS](/architecture/msa/msa-pattern-cqrs/)
+- [분산 DB 조회 설계](/architecture/msa/msa-distributed-db-query-design/)
 
 ## 현실적인 적용 방법
 
 - **방법 1 : API 조합 패턴** `In-memory Join`
-    - [분산 데이터 쿼리하기](https://tonyjev93.github.io/architecture/msa/msa-distributed-data-query/) > `API 조합 패턴`
+    - [분산 데이터 쿼리하기](/architecture/msa/msa-distributed-data-query/) > `API 조합 패턴`
     - 이유
         - 대용량 데이터가 아닌 경우 `In-memory Join` 을 해도 성능상의 Issue 는 없을 것
         - 분산 DB 에서 실시간 데이터 조회가 가능하기 때문에 데이터 `무결성 보장` 가능 (실시간성이 보장되면 좋은 경우 사용)
@@ -96,7 +96,7 @@ MSA : 회사 프로젝트 내에 분산 DB 환경에서의 API 조합기를 적�
         - 서비스 복잡도에 따라 조합 과정이 번거로울 수 있음
         - 별도의 조합기 구현 필요
 - **방법 2 : CQRS 패턴**
-    - [분산 데이터 쿼리하기](https://tonyjev93.github.io/architecture/msa/msa-distributed-data-query/) > `CQRS 패턴`
+    - [분산 데이터 쿼리하기](/architecture/msa/msa-distributed-data-query/) > `CQRS 패턴`
     - 배치를 통한 DB 덮어쓰기
     - 이유
         - `Join Table` 구성을 통해 간단한 방식으로 데이터 조회 가능
@@ -128,7 +128,7 @@ MSA : 회사 프로젝트 내에 분산 DB 환경에서의 API 조합기를 적�
 
 ![img_5](https://user-images.githubusercontent.com/53864640/160266807-ac6796de-5816-4fdb-9f96-c03f60d3a57f.png){: .align-center}
 
-- [Facade Pattern 란 ?](https://tonyjev93.github.io/design%20pattern/design-pattern-facade/)
+- [Facade Pattern 란 ?](/design%20pattern/design-pattern-facade/)
     - **하나의 요청**을 수행하기 위해 **여러 서비스들이 호출** 되는 경우 클라이언트 단에서 각각의 서비스들의 정체를 알 필요 없이 하나의 요청에 대한 정보만 제공해주는 것.
     - 여러 서비스들의 수행을 하나의 요청으로 묶는 패턴
 - API Composer 와의 차이점

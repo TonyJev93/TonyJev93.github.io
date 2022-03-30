@@ -304,3 +304,5 @@ toc_label: "1장. 실용주의 철학"
    - 늘 사람들에게 응답해주면 때때로 일어나는 실수에 대해 훨씬 관대해질 것이다.
 
 > Tip10 : 무엇을 말하기와 어떻게 말하는가 모두 중요하다.
+
+[⬅️ 실용주의 프로그래머 목차보기](/software%20engineering/the%20pragmatic%20programmer/pragmatic-programmer-00-overview/)
