@@ -48,4 +48,4 @@ About : 저에 대해 소개드립니다. :)
 - 설명
     - 내용 : NHN Academy 에서 모집한 부트캠프 수강생들의 결제를 지원하는 브릿지 서버 개발
     - 역할 : 설계, 서버개발, 어드민개발
-    - 사용 기술 : Vue.js, Spring Boot, MSA, JPA, Querydsl, JUnit/Spock, MySQL, Docker, Jenkins, **API Composer**
+    - 사용 기술 : Vue.js, Spring Boot, MSA, JPA, Querydsl, JUnit/Spock, MySQL, Docker, Jenkins
