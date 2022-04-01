@@ -6,14 +6,14 @@ categories:
     - The Pragmatic Programmer
 tags:
     - Software Engineering
-    - 개발 도서
+    - 개발도서
     - 실용주의 프로그래머
 toc: true
 toc_sticky: true
 toc_label: "2장. 실용주의 접근법"
 ---
 
-실용주의 프로그래머 개발 도서 관련 : 2장 정리
+실용주의 프로그래머 개발도서 관련 : 2장 정리
 {: .notice--info}
 
 # 0. 개요

@@ -6,14 +6,14 @@ categories:
     - The Pragmatic Programmer
 tags:
     - Software Engineering
-    - 개발 도서
+    - 개발도서
     - 실용주의 프로그래머
 toc: true
 toc_sticky: true
 toc_label: "목차"
 ---
 
-실용주의 프로그래머 개발 도서 관련 : 도서의 전체적인 개요를 살펴본다.
+실용주의 프로그래머 개발도서 관련 : 도서의 전체적인 개요를 살펴본다.
 {: .notice--info}
 
 | 목차                                                                                            |
