@@ -13,7 +13,11 @@ toc_label: "목차"
 
 ## _2022. 03. ~_
 
-![image](https://user-images.githubusercontent.com/53864640/158804781-0274e9b1-c5de-4bdc-be91-f2265e89bb41.png){: .align-center}
+[//]: # (![image]&#40;https://user-images.githubusercontent.com/53864640/158804781-0274e9b1-c5de-4bdc-be91-f2265e89bb41.png&#41;{: .align-center})
+
+|  일  |                    월                     |                  화                  |                       수                       |                               목                               |                   금                   |  토  |
+|:---:|:----------------------------------------:|:-----------------------------------:|:---------------------------------------------:|:-------------------------------------------------------------:|:-------------------------------------:|:---:|
+|     | [Domain Driven Desgin](/categories/#ddd) | [Front End](/categories/#front-end) | [Design Pattern](/categories/#design-pattern) | [Pragmatic Programmer](/categories/#the-pragmatic-programmer) | [Clean Code](/categories/#clean-code) |     |
 
 ## 평일
 평일에는 기초 다지기를 위해 **요일별 도서를 지정**하고, **공부한 내용을 정리하여 업로드 하는것을 목표**로 한다. <br>
@@ -38,22 +42,21 @@ toc_label: "목차"
 
 ### Front-End
 
-- [ ] **기초부터 완성까지, 프런트엔드 (ing)**
+- [ ] [**기초부터 완성까지, 프런트엔드 (ing)**](/tags/#기초부터-완성까지-프런트엔드)
 
 ### Back-End
 
-- [ ] **Design Pattern (ing)**
-- [ ] **Clean Code (ing)**
+- [ ] [**Design Pattern (ing)**](/categories/#design-pattern)
+- [ ] [**Clean Code (ing)**](/categories/#clean-code)
 - [ ] 리팩토링
 - [ ] Database 관련
 
 ### ETC
-- [ ] **Pragmatic Programmer (ing)**
-- [ ] 개발 원칙 (~~OOP~~, ~~3대 원칙~~, ...)
+- [ ] [**Pragmatic Programmer (ing)**](/categories/#the-pragmatic-programmer)
+- [ ] 개발 원칙 ([~~OOP~~](https://github.com/TonyJev93/Study/blob/main/ETC/OOP/SOLID.md), [~~3대 원칙~~](/software%20engineering/software-engineering-dev-3-rules/), ...)
 
 ## 역량 강화
 
-- [ ] **DDD (ing)**
-- [ ] MSA
+- [ ] [**DDD (ing)**](/categories/#ddd)
+- [ ] [**MSA (ing)**](https://github.com/TonyJev93/eureka-sample)
 - [ ] Clean Architecture
-
