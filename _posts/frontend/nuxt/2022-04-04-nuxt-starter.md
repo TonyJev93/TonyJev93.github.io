@@ -24,7 +24,7 @@ Nuxt.js : 인프런 장기효님의 강의와 강의노트를 기반으로 Nuxt.
 
 ## Nuxt란?
 
-- SSR 프레임워크 (서버에서 모두 작성해서 클라이언트로 보낸 뒤 화면에 그리 방식)
+- SSR 프레임워크 (서버에서 모두 작성해서 클라이언트로 보낸 뒤 화면에 그리는 방식)
 - 웹 애플리케이션 제작에 필요한 Vuex, Router, Axios와 같은 라이브러리를 미리 구성한 SPA, SSR, 정적 웹 사이트를 쉽게 제작할 수 있게 함.
 
 ## 왜 SSR 쓰는가?
@@ -51,13 +51,6 @@ Nuxt.js : 인프런 장기효님의 강의와 강의노트를 기반으로 Nuxt.
   - 파일 기반 라우팅 방식(라우터 설정 필요 X)
 - 페이지 로딩 속도
 - UX
-- 코드 스플리팅
-
-### 특징
-
-- SSR
-- 규격화된 폴더 구조
-- pages 폴더 기반의 자동 라우팅 설정
 - 코드 스플리팅
 
 <br>
@@ -147,6 +140,7 @@ async asyncData() {
 ```
 
 - params 사용법
+
 ```javascript
 async asyncData({ params }) { // params = router 정보($route) 
   const response = await fetchProductById(params.id)
