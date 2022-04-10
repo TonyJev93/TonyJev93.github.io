@@ -15,7 +15,7 @@ toc_sticky: true
 toc_label: "목차"
 ---
 
-프론트엔드 개발환경의 이해와 실습 : 인프런 강의인 "프론트엔드 개발환경의 이해와 실습 - 김정환님"를 수강하며 학습내용을 기록한 내용들
+프론트엔드 개발환경의 이해와 실습 : 인프런 강의인 "프론트엔드 개발환경의 이해와 실습 by 김정환님"을 수강하먄사 학습힌 내용들을 정리해 보았다.
 {: .notice--info}
 
 # NPM
@@ -41,7 +41,7 @@ toc_label: "목차"
 ```html
 <script src="https://unpkg.com/react@16/umd/react.development.js"></script>
 ```
-- CDN 서버 장애로 이냏 외부 라이브러리를 사용할 수 없을 때가 있음.
+- CDN 서버 장애로 인해 외부 라이브러리를 사용할 수 없을 때가 있음.
 
 ### 직접 다운로드 방법
 
@@ -55,9 +55,9 @@ toc_label: "목차"
 - 유의적 버전 (Sementic Version)
   - 주 버전(Major) : 기존 버전과 호환되지 않게 변경
   - 부 버전(Minor) : 기존 버전과 호환되면서 기능이 추가된 경우
-  - 수 버전(Patch) : 기존 버전과 홀환되면서 버그를 수정한 경우
+  - 수 버전(Patch) : 기존 버전과 호환되면서 버그를 수정한 경우
 - 버전의 범위
-  - `=, >, < 등의 연산기호 + 버전` 사용
+  - `연산기호(=, >, < 등)`+ `버전` 사용
   - ~ (틸드) : 마이너 버전이 명시되어 있으면 패치버전을 변경. 마이너 버전이 없으면 마이너 버전을 갱신. 
     - ex)
       - 마이너 버전 있는 경우 : ~1.2.3 표기는 1.2.3 부터 1.3.0 미만 까지 포함
@@ -130,7 +130,7 @@ console.log(math.sum(1, 2));
 
 ### 다양한 모듈 스펙
 
-- 자바스크립트 모듈을 구현하는 대표적인 명세 : AMD, CommonJS
+- 자바스크립트 모듈을 구현하는 대표적인 명세 : CommonJS, AMD
 
 #### CommonJS
 
@@ -176,7 +176,7 @@ math.sum(1, 2);
 
 - 모든 브라우져에서 모듈 시스템을 지원하지는 않음
 - IE 포함 몇 브라우져는 여전히 모듈 사용하지 못함
-- 크롬의 경우를 살펴보면,
+- 크롬의 경우를 살펴보면
 
 ```html
 <script type="module" src="app.js"></script>
@@ -188,7 +188,7 @@ math.sum(1, 2);
 ## 2. 엔트리/아웃풋
 
 - 웹팩은 흩어져있는 자바스크립트의 의존 관계를 한 곳으로 뭉쳐주는 역할을 함.
-- 웹팩에 의해 생성된 뭉쳐진 파일을 번들이라고 하며 웹팩은 그런 의미에서 번들러라고도 부름.
+- 웹팩에 의해 뭉쳐져 생성된 파일을 번들이라고 하며, 웹팩은 그런 의미에서 번들러라고도 부름.
 
 ### 웹팩 명령어
 
@@ -226,7 +226,7 @@ export default {
 {
   "type": "module",
   "scripts": {
-    "build": "webpack"
+    "build": "webpack --progress"
   },
   "devDependencies": {
     "webpack": "^4.46.0",
@@ -235,7 +235,7 @@ export default {
 }
 ```
 - `type` : module 로 설정해야 함.
-- `script` : webpack 으로 지정해두면 알아서 webpack 경로를 찾아서 명령어를 수행해 줌.
+- `script` : webpack 으로 지정해두면 알아서 webpack 경로를 찾아서 명령어를 수행해 줌. `--progress` 는 webpack 빌드 상태를 커맨드라인에 보여주는 옵션
 
 - 실습 코드 : [lecture-frontend-dev-env](https://github.com/jeonghwan-kim/lecture-frontend-dev-env.git) by jeonghwan-kim
 ```bash
@@ -252,7 +252,7 @@ $ git clone https://github.com/jeonghwan-kim/lecture-frontend-dev-env.git
 - 이를 가능하게 하는 것은 웹팩의 로더 덕분임.
   - 모든 파일을 자바스크립트의 모듈 파일처럼 만들어줌(ex. css -> javascript, image -> data URL 형식의 문자열, typescript -> javascript)
 
-### 커스텀 로더 설정
+### 커스텀 로더 만들기
 
 ```javascript
 // my-webpack-loader.js
@@ -337,7 +337,140 @@ export default {
 - 로더 실행 순서는 use 배열의 뒤에서부터 앞으로 수행 됨.
 - 정적 파일은 로딩되면서 생성되는 이름이 해쉬값으로 되어있음. 이는 브라우져가 동일 이름의 파일에 대해서는 케싱하기 때문에 내용이 변경되었을 때 실시간 반영하지 못함. 이를 방지하기 위해 매번 파일명이 다르도록 생성함.
 
+## 4. 플러그인
 
+### 역할
+
+- 로더는 파일 단위로 처리하는 반면, 플러그인은 번들된 결과물을 처리
+- 번들된 자바스크립트를 난독화 한다거나 특정 텍스트를 추출하는 용도로 사용
+
+### 커스텀 플러그인 만들기
+
+```javascript
+// my-webpack-plugin.js
+class MyWebpackPlugin {
+    apply(compiler) {
+        compiler.hooks.done.tap('My Plugin', 
+                stats => {console.log('MyPlugin: done');} // Plugin 완료 후 동작하는 콜백 함수
+        )
+    }
+}
+
+module.exports = MyWebpackPlugin;
+```
+
+```javascript
+// webpack.config.js
+import path from 'path';
+import MyWebpackPlugin from './my-webpack-plugin';
+
+export default {
+    plugins: [
+        new MyWebpackPlugin(),
+    ]
+}
+```
+
+- 플러그인은 어떻게 번들 결과에 접근할 수 있는지 살펴보자. 다음은 웹팩 내방 플러그인 BannerPlugin 코드를 참고한 소스이다.
+
+```javascript
+// my-webpack-plugin.js
+class MyWebpackPlugin {
+    apply(compiler) {
+        compiler.plugin('emit', (compilation, callback) => {
+            const source = compilation.assets['main.js'].source();
+            compilation.assets['main.js'].source = () => {
+                const banner = [
+                    '/**',
+                    ' * 이것은 BannerPlugin이 처리한 결과입니다.',
+                    ' * Build Date: 2022-04-10',
+                    ' */'
+                ].join('\n');
+                return banner + '\n\n' + source;
+            }
+            
+            callback();
+        })
+    }
+}
+
+module.exports = MyWebpackPlugin;
+```
+
+- `compilation.assets['main.js'].source()`을 통해 번들링 된 main.js 파일에 접근할 수 있다.
+- 접근한 source 를 조작하여 번들링된 결과를 변형시킬 수 있게 된다.
+
+### 자주 사용하는 플러그인
+
+- BannerPlugin
+  - 웹팩이 기본 제공하는 플러그인
+  - 결과물에 빌드 정보나 커밋 버전같은 걸 추가할 수 있음
+- DefinePlugin
+  - 웹팩이 기본 제공하는 플러그인
+  - 어플리케이션은 개발환경과 운영환경으로 나눠서 운영함
+  - 환경에 따라 API 서버 주소가 다를 수 있음
+  - 같은 소스 코드를 두 환경에 배포하기 위해서는 환경 의존적인 정보를 소스가 아닌 곳에서 관리하는 것이 좋음 (배포때마다 코드를 수정하는 것은 곤란하기 때문)
+  - DefinePlugin 은 이러한 환경 정보를 제공하기 위한 플러그인이다.
+  - node 에서 제공하는 환경변수 사용
+    - 웹팩 설정의 mode에 설정한 값 => `process.env.NODE_ENV` 에 들어감
+- HtmlWebpackPlugin
+  - 써드 파티 패키지
+  - HTML 파일을 후처리하는데 사용
+  - 빌드 타임의 값을 넣거나 코드를 압축할 수 있음
+- CleanWebpackPlugin
+  - 써드 파티 패키지
+  - 빌드 이전 결과물을 제거하는 플러그인
+  - 과거 파일이 남아있는 경우 덮어씌여지면 괜찮지만 그렇지 않을 경우 아웃풋 폴더에 계속 남아있는 것을 방지하기 위함
+- MiniCssExtractPlugin
+  - 써드 파티 패키지
+  - CSS가 많아지면 하나의 자바스크립트 결과물로 만드는 것이 부담이 됨
+  - 번들 결과에서 CSS 코드만 뽑아 CSS 파일로 만들어 역할에 따라 파일을 분리하는 것이 좋음
+  - 브라우져에서 큰 파일 하나를 내려받기 보다, 여러 개의 작은 파일을 동시에 다운받는 것이 빠름
+  - 개발환경에서는 CSS를 하나의 모듈로 처리해도 되지만, 프로덕션 환겅에서는 분리하는 것이 효과적
+  - MiniCssExtractPlugin은 CSS를 별도의 파일로 뽑아내는 플러그인
+  - MiniCssExtractPlugin 에서 제공해주는 loader 를 사용해야 함.
+    - `process.env.NODE_ENV === 'production' ? MiniCssExtractPlugin.loader : 'style-loader'
+
+```javascript
+const webpack = require('webpack');
+const childPorcess = require('child_process'); // terminal 명령어 수행용
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const { CleanWebpackPlugin } = require('clean-webpack-plugin'); // default로 export 되어있지 않아서 직접 꺼내와야함.
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+
+
+module.exports = {
+    plugins: [
+        new webpack.BannerPlugin({
+          banner: `
+            Build Date: ${new Date().toLocaleString()}
+            Commit Version: ${childPorcess.execSync('git rev-parse --short HEAD')}
+            Author: ${childPorcess.execSync('git config user name')}
+          `
+        }),
+        new webpack.DefinePlugin({
+          TWO: '1+1', // 애플리케이션에 TWO 라는 전역 변수가 생성이 됨. ex) console.log(TWO); // 2
+          TWO_STRING: JSON.stringify('1+1'), // ex) 문자열 선언, console.log(TWO_STRING); // "1+1"
+          'api.domain': JSON.stringify('http://dev.api.domain.com') // 객체 선언, ex) console.log(api.domain); // "http://dev.api.domain.com"
+        }),
+        new HtmlWebpackPlugin({
+          template: './src/index.html',  // build 과정에 html 을 포함시켜 main.js 와 같은 번들된 javascript 를 index.html 에 자동으로 넣어줌.
+          templateParameters: {
+              env: process.env.NODE_ENV === 'development' ? '(개발용)' : '' // index.html 에서 'EJS 문법'인 <%= env %> 를 통해 ENV에 접근할 수 있음.
+          },
+          minify: process.env.NODE_ENV === 'production' ? {
+              collapseWhitespace: true, // 공백 제거
+              removeComments: true, // 주석 제거
+          } : false // 운영환경에서만 활성화
+        }),
+        new CleanWebpackPlugin(),    // dist 폴더를 비워주는 역할
+        ...(process.env.NODE_ENV === 'production'
+            ? [new MiniCssExtractPlugin({filename: '[name].css'})]
+            : []
+        ),  // 운영환경인 경우에만 수행, 개발환경에서는 하나의 javascript를 만드는 것이 더욱 빌드속도가 빠름.
+    ]
+}
+```
 
 <br>
 
