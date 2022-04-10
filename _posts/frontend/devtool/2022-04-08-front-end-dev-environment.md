@@ -474,7 +474,223 @@ module.exports = {
 
 <br>
 
+# 바벨(Babel)
 
+## 1. 배경
+
+- 고대 히브리 신화의 이야기를 살펴보자.
+
+사람들이 하늘 높이 올라가기 위해 바벨탑을 쌓기 시작하였다. 그러나 하느님이 그들이 사용하는 언어를 서로 다르게 바꾸어 서로 소통할 수 없게 만들어 탑을 쌓는 것을 실패하게 만들었다.
+{: .notice--info}
+
+- 사용하는 말이 달라 바벨탑 쌓기에 실패했듯이, 브라우져마다 사용하는 언어가 조금씩 달라 프론트엔드 코드는 일관적이지 못할 때가 많음.
+- FE 개발에서 크로스브라우징 이슈는 코드의 일관성을 해치고 초심자를 불안하게 만듦. (히브리어로 바벨이 '혼돈'이라는 뜻)
+- 크로스브라우징의 혼란을 해결해 줄 수 있는 것이 **바벨**이다.
+- ES2015로 작성한 코드를 모든 브라우져에서 동작하도록 호환성을 지켜줌.(Typescript, JSX 등 다른 언어로 분류된 것도 포함)
+- 
+## 2. 바벨 기본동작
+
+- 설치 방법
+
+```bash
+# babel 설치
+$ npm install @babel/core @babel/cli 
+
+# babel 실행
+$ npx babel app.js
+```
+
+- 빌드 과정
+  1. 파싱(Parsing) - 토큰 분해
+  2. 변환(Transforming) - ES6 -> ES5 변환
+  3. 출력(Printing) - 변환 결과 출력
+
+## 3. 플러그인
+
+- 바벨은 파싱과 출력만 담당하고 변환 작업은 **플러그인**이 처리한다.
+
+### 커스텀 플러그인
+
+```javascript
+// src/app.js:
+const alert = msg => window.alert(msg);
+
+// my-bebel-plugin.js
+module.exports = function myBabelPlugin() {
+    return {
+        visitor: {
+            Identifier(path) {
+                const name = path.node.name;
+                
+                // 바벨이 만든 AST 노드를 출력
+                console.log('Identifier() name:', name)
+                
+                // 변환작업: 코드 문자열을 역순으로 변환
+                path.node.name = name
+                        .split("")
+                        .reserve()
+                        .join("");
+            }
+        }
+    }
+}
+```
+
+```bash
+# babel 실행
+$ npx babel app.js --plugins './my-babel-plugin.js'
+```
+
+```bash
+// 출력 결과
+Identifier() name: alert
+Identifier() name: msg
+Identifier() name: window
+Identifier() name: alert
+Identifier() name: msg
+const trela = gsm = > wodniw.trela(gsm); // 역순으로 정리 된 결과를 볼 수 있음.
+```
+
+- const => var 변환
+
+```javascript
+// my-bebel-plugin.js
+module.exports = function myBabelPlugin() {
+    return {
+        visitor: {
+            VariableDeclaration(path) {
+                console.log('VariableDeclaration() kind:', path.node.kind); // const
+                
+                // const => bar 변환
+                if (path.node.kind === 'const') {
+                    path.node.kind = 'var'
+                }
+            }
+        }
+    }
+}
+```
+
+```bash
+// 출력 결과
+VariableDeclaration() kind: const
+var alert = msg = > wodniw.alert(msg); // const => var
+```
+
+### 플러그인 사용하기
+
+- block-scoping
+  - const, let 처럼 블록 스코핑을 따르는 예약어를 함수 스코핑을 사용하는 var 로 변경
+- arrow-functions
+  - IE 는 화살표 함수를 지원하지 않는데 arrow-functions 플러그인을 이용해서 일반 함수로 변경 가능
+- strict-mode
+  - ES5에서 지원하는 엄격 모드를 사용하는 것이 안전하기 때문에 "use strict" 구문을 추가해야 함
+  - strict-mode 플러그인이 이를 제공 해줌
+
+### 컨피그 파일 사용
+
+- `babel.config.js` 파일 사용
+
+```javascript
+// babel.config.js
+module.exports = {
+    plugins: [
+        "@babel/plugin-transform-block-scoping",
+        "@babel/plugin-transform-arrow-functions",
+        "@babel/plugin-transform-strict-mode",
+    ]
+}
+```
+
+## 4. 프리셋 사용
+
+#### 커스텀 프리셋
+
+```javascript
+// my-babel-preset.js
+module.exports = function myBabelPreset() {
+    return {
+        plugins: [
+            "@babel/plugin-transform-block-scoping",
+            "@babel/plugin-transform-arrow-functions",
+            "@babel/plugin-transform-strict-mode",
+        ],
+    }
+}
+```
+
+```javascript
+// babel.config.js
+module.exports = {
+    presets: [
+        './my-babel-preset.js'
+    ]
+}
+```
+
+### 주요 프리셋
+
+- preset-env
+  - 바벨 7 버전 이후 연도별 각 프리셋(babel-reset-es2015 ~ latest)이 env 하나로 합쳐짐
+- preset-flow
+- preset-react
+- preset-typescript
+
+```javascript
+// babel.config.js
+module.exports = {
+    presets: [
+        '@babel/preset-env', {
+        targets: { // 특정 타겟에 맞추어 변환
+            chrome: '79',
+            ie: '11',
+        }
+      }
+    ]
+}
+```
+
+- 브라우져별 문법 사용 가능여부는 [Can I use](https://caniuse.com/) 에서 확인 가능
+- Promise 와 같이 IE 11 에서 지원하지 않는 함수는 babel 을 통해서 변환하더라도 찾을 수 없기 때문에 프로그램이 죽게 된다.
+- 이렇게 변환 할 수 없는 것들에 대해서는 **"폴리필"** 이라고 부르는 코드조각을 추가해서 해결한다.
+
+```javascript
+// babel.config.js
+module.exports = {
+    presets: [
+        '@babel/preset-env', {
+        targets: { // 특정 타겟에 맞추어 변환
+            chrome: '79',
+            ie: '11',
+        },
+        // 폴리필 설정
+        useBuiltIns: 'usage',   // 'entry', false
+        corejs: {
+            version: 2,
+        }
+      }]
+}
+```
+
+## 5. 웹팩으로 통합
+
+- 실무 환경에서는 바벨을 직접 사용하기 보다 웹팩으로 통합하여 사용
+- `babel-loader`와 같이 바벨이 로더 형태로 제공 됨
+
+```javascript
+// webpack.config.js
+export default {
+    module: {
+        rules: [
+            {
+                test: /\.js$/,  // 로더가 처리해야 하는 파일의 패턴(=정규 표현식)
+                loader: 'babel-loader',
+                exclude: /node_modules/ // node_modules은 로더 대상 제외
+            }
+        ]
+    }
+}
+```
 
 # 참고
 
