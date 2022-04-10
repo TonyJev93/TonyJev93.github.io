@@ -72,7 +72,7 @@ toc_label: "목차"
 
 <br>
 
-# 웹팩
+# 웹팩(Webpack)
 
 ## 1. 배경
 
@@ -604,7 +604,7 @@ module.exports = {
 
 ## 4. 프리셋 사용
 
-#### 커스텀 프리셋
+### 커스텀 프리셋
 
 ```javascript
 // my-babel-preset.js
@@ -691,6 +691,125 @@ export default {
     }
 }
 ```
+
+### sass-loader
+
+- scss, sass -> css 로 변환해주는 역할
+
+```javascript
+// webpack.config.js
+export default {
+  module: {
+    rules: [
+      {
+        test: /\.s[ac]ss$/i,  // 로더가 처리해야 하는 파일의 패턴(=정규 표현식)
+        use: [
+          'style-loader', // Creates 'style' nodes from JS strings
+          'css-loader', // Translate CSS into CommonJS
+          'sass-loader',    // Compiles Sass to CSS
+        ]
+      }
+    ]
+  }
+}
+```
+
+- use 배열에 포함된 로더는 뒤에서 앞 순서로 수행
+  1. sass-loader : Sass -> CSS 파일로 변환
+  2. css-loader : CSS -> CommonJS 로 변환
+  3. style-loader : CommonJS -> HTML의 style 노드로 추가
+
+<br>
+
+# 린트(Lint)
+
+## 배경
+
+- 오래된 스웨터의 보푸라기를 린트(Lint) 라고 부름
+- 옷에 뭍은 보푸라기 처럼 코드에도 그러한 것들이 종종 있다. (ex. 들여쓰기를 맞추지 않은 경우, 선언된 변수가 사용되지 않는 경우 ...)
+- 보푸라기가 있더라도 옷은 입을 수 있듯 코드도 동작은 한다. 그러나 가독성이 떨어지고 유지보수하기에 좋지 않기 때문에 이를 제거해야 한다.
+- 보푸라기를 제거하는 린트 롤러(Lint roller)와 같이 코드의 오류나 버그, 스타일 등을 점검하는 것을 린트(Lint) 혹은 린터(Linter)라고 부른다.
+
+## ESLint
+
+### 개념
+- ECMAScript 코드에서 문제점을 검사하고 일부는 더 나은 코드로 정정하는 린트 도구 중 하나
+- 과거 JSLint, JSHint 에 이어 최근 ESLint 를 많이 사용함
+- 검사 항목 
+  - 포맷팅 : 일관된 코드 스타일 유지, 가독성 좋은 코드 (ex. 들여쓰기, 코드라인 최대 너비 등)
+  - 코드 품질 : 잠재적 오류나 버그 예방 (ex. 미사용 변수, 글로벌 스코프 사용 경고 등)
+- 설치
+
+```bash
+# 설치
+$ npm install eslint
+
+# 사용 (설정파일 필요 .eslintrc.js)
+$ npx eslint app.js
+```
+
+- 설정파일
+
+```javascript
+// .eslintrc.js
+module.exports = {
+    
+}
+```
+
+### 규칙(Rules)
+
+- ESLint 검사 규칙을 미리 정해 놓음.
+- [Rules](https://eslint.org/docs/rules/) 를 통해 어떠한 규칙이 존재하는지 확인 가능.
+- 규칙(Rules) 적용하기
+
+![img_1](https://user-images.githubusercontent.com/53864640/162618772-f2f648f0-9a4b-4e0a-882d-96ea6adc5e6c.png){: .align-center}
+_- [그림 출처](https://eslint.org/docs/rules/)_
+{: .text-center}
+
+
+```javascript
+// .eslintrc.js
+module.exports = {
+    rules: {
+        "no-unexpected-multiline": "error",
+        "no-extra-semi": "error",
+    }
+}
+```
+
+- 🔧(렌치)표시가 있는 Rules 는 Lint 명령어에 `--fix` 옵션을 붙여 실행하면 자동으로 수정가능하다.
+
+```bash
+$ npx eslint app.js --fix
+```
+
+### Extensible Config
+
+- `eslint:recommended` 필수적으로 필요한 미리 정해놓은 여러 규칙들을 포함하는 설정
+- 위 Rules 사이트의 그림에서 ✓ 표시 되어있는 것들이 모두 `eslint:recommended`에 포함되어 있는 규칙들이다.
+
+```javascript
+// .eslintrc.js
+module.exports = {
+    extends: [
+        "eslint:recommended", // 미리 설정된 규칙 세트 사용
+    ]
+}
+``` 
+
+- ESLint 기본 제공 설정 외에 자주 사용되는 두 가지
+  - airbnb : airbnb 스타일 가이드를 따르는 규칙 모음
+  - standard : 자바스크립트 스탠다드 스타일 사용
+
+### 초기화(--init ) 옵션
+
+- 설정을 대화형으로 손쉽게 구성할 수 있도록 함
+
+```bash
+$ npx eslint --init
+```
+
 
 # 참고
 
