@@ -15,7 +15,7 @@ toc_sticky: true
 toc_label: "목차"
 ---
 
-프론트엔드 개발환경의 이해와 실습 : 인프런 강의인 "프론트엔드 개발환경의 이해와 실습 by 김정환님"을 수강하먄사 학습힌 내용들을 정리해 보았다.
+프론트엔드 개발환경의 이해와 실습 : 인프런 강의인 "프론트엔드 개발환경의 이해와 실습 by 김정환님"을 수강하면서 학습한 내용들을 정리해 보았다.
 {: .notice--info}
 
 # NPM
@@ -810,7 +810,134 @@ module.exports = {
 $ npx eslint --init
 ```
 
+## Prettier
+
+- 코드를 더 이쁘게 만들어줌.
+- ESLint 의 포맷팅과 역할이 겹치지만 좀 더 일관적인 스타일로 코드를 다듬음. (But, 품질과 관련된 기능은 수행하지 않음.)
+- 설치
+
+```bash
+# 설치
+$ npm install -D prettier
+
+# 실행
+$ npx prettier app.js
+
+# 실행 (자동 수정)
+$ npx prettier app.js --write
+```
+
+### 통합방법 with ESLint
+
+- Prettier는 코드 품질을 잡아주지 못하기 때문에 ESLint도 결국 사용해야 함.
+- 둘을 같이 사용하게 되면 둘 간의 충돌되는 규칙들이 존재하는데 `eslint-config-prettier`는 이러한 것들을 정리해주는 역할을 수행한다.
+
+```bash
+$ npm install -D eslint-config-prettier
+```
+
+```javascript
+// .eslintrc.js
+module.exports = {
+    extends: [
+        "eslint:recommended",
+        "eslint-config-prettier"
+    ]
+}
+```
+
+- 이렇게 하는 경우 ESLint와 Prettier 명령어를 따로 실행해서 검사해야 함.
+- 반면, `eslint-plugin-prettier`는 프리티어 규칙을 ESLint 규칙으로 추가하는 플러그인으로 ESLint만 실행하면 된다.
+
+```bash
+$ npm install -D eslint-plugin-prettier
+```
+
+```javascript
+// .eslintrc.js
+module.exports = {
+    plugins: [
+        "prettier",
+    ],
+    rules: {
+        "prettier/prettier": "error"
+    }
+}
+```
+
+## 자동화
+
+- 린트 자동화 방법
+  1. Git Hook 사용
+  2. 에디터 확장 도구 사용
+
+### 1. Git Hook 사용
+
+- 커밋 전, 푸시 전 등 깃 커맨드 실행 시점에 끼여들수 있는 훅을 제공
+- `husky` : 깃 훅을 쉽게 사용할 수 있도록 돕는 도구(Git 2.13.0 이상 버전 지원)
+
+```bash
+# husky 설치
+$ npm install -D husky
+```
+
+- husky 설정 - package.json
+
+```json
+{
+  "husky": {
+    "hooks": {
+      "pre-commit": "eslint app.js --fix"
+    }
+  }
+}
+```
+
+- `husky > hooks > pre-commit` 을 통해 Git 커밋 전에 ESLint 검사 명령어를 수행할 수 있음.
+  - 만약 린트 수행 중 오류발생 시 커밋 과정은 취소 됨.
+  - 린트 통과 강제화 가능
+- 그러나 이 경우 소스파일이 많아지게 되면 검사해야하는 파일이 많아져 처리 속도의 문제가 발생할 수 있다.
+- 따라서, 변경된 파일에 대해서만 검사를 할 수 있도록 하는 도구가 필요한데, 그것이 바로 `lint-staged`이다.
+
+```bash
+# lint-staged 설치
+$ npm install -D lint-staged
+```
+
+```json
+{
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+  "*.js": "eslint --fix"
+  }
+}
+```
+
+- 내용이 변경된 파일 중 .js로 끝나는 확장자 파일만 린트로 코드검사 수행
+
+### 2. 에디터 확장 도구 사용
+
+- VS Code Extension 사용하기
+  - ESLint
+  - Prettier
+- ESLint 활성화 설정 추가
+  - .vscode/settings.json
+
+```json
+{
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": true
+  }
+}
+```
+
+<br>
 
 # 참고
 
 - [프론트엔드 개발환경의 이해와 실습 (webpack, babel, eslint..)](https://www.inflearn.com/course/%ED%94%84%EB%A1%A0%ED%8A%B8%EC%97%94%EB%93%9C-%EA%B0%9C%EB%B0%9C%ED%99%98%EA%B2%BD/dashboard)
+- [프론트엔드 개발환경의 이해 강의자료 - 김정환님 블로그](https://jeonghwan-kim.github.io/series/2019/12/09/frontend-dev-env-npm.html)
