@@ -22,7 +22,7 @@ toc_label: "목차"
 |:-----------------------------------------------------------------|
 | [1장. 깨끗한 코드](/programming%20skill/clean%20code/clean-code-01/)   |
 | [2장. 의미 있는 이름](/programming%20skill/clean%20code/clean-code-02/) |
-| 3장. 함수                                                           |
+| [3장. 함수](/programming%20skill/clean%20code/clean-code-03/)       |
 | 4장. 주석                                                           |
 | 5장. 형식 맞추기                                                       |
 | 6장. 객체와 자료 구조                                                    |
