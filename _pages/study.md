@@ -60,3 +60,9 @@ toc_label: "목차"
 - [ ] [**DDD (ing)**](/categories/#ddd)
 - [ ] [**MSA (ing)**](https://github.com/TonyJev93/eureka-sample)
 - [ ] Clean Architecture
+
+## 외부 강의
+
+### NEXTSTEP
+
+- [**인프라 공방 5기 (ing)**](https://edu.nextstep.camp/s/RQ1guYV0)
