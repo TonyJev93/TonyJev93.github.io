@@ -310,4 +310,4 @@ $ telnet {Target Server IP} {Target Service Port}
 
 # 참고
 
-- [인프라 공방](https://edu.nextstep.camp/c/VI4PhjPA/) - 강의자료
+- [인프라 공방 5기](https://edu.nextstep.camp/c/VI4PhjPA/) - 강의자료
