@@ -14,6 +14,18 @@ toc_sticky: true
 toc_label: "목차"
 ---
 
+---
+
+<div style="
+  display: flex;
+  justify-content: space-between;
+">
+  <a href="/infra/nextstep/인프라%20공방%205기/infra-workshop-00-overview/">⬅️ 인프라 공방 5기 목차보기</a>
+  <a href="/infra/nextstep/인프라%20공방%205기/infra-workshop-01-2-practice/"> 1주차 - 그럴듯한 인프라 만들기(2) : 실습 보러가기 ➡️️</a>
+</div>
+
+---
+
 인프라 공방 5기 : NEXTSTEP 에서 진행하는 '인프라 공방 5기' 1주차 '그럴듯한 인프라 만들기' 실습에 앞서 이에 필요한 배경지식을 정리한다.
 {: .notice--info}
 
@@ -311,3 +323,17 @@ $ telnet {Target Server IP} {Target Service Port}
 # 참고
 
 - [인프라 공방 5기](https://edu.nextstep.camp/c/VI4PhjPA/) - 강의자료
+
+<br>
+
+---
+
+<div style="
+  display: flex;
+  justify-content: space-between;
+">
+  <a href="/infra/nextstep/인프라%20공방%205기/infra-workshop-00-overview/">⬅️ 인프라 공방 5기 목차보기</a>
+  <a href="/infra/nextstep/인프라%20공방%205기/infra-workshop-01-2-practice/"> 1주차 - 그럴듯한 인프라 만들기(2) : 실습 보러가기 ➡️️</a>
+</div>
+
+---

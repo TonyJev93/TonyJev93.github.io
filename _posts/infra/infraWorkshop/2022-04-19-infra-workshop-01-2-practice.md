@@ -1,6 +1,6 @@
 ---
 title: "[인프라 공방 5기] 1주차 - 그럴듯한 인프라 만들기(2) : 실습"
-last_modified_at: 2022-04-19T23:00:00+09:00
+last_modified_at: 2022-04-20T23:00:00+09:00
 categories:
     - Infra
     - NEXTSTEP
@@ -12,6 +12,12 @@ tags:
 toc: true
 toc_sticky: true
 toc_label: "목차"
+---
+
+---
+
+[⬅️ 인프라 공방 5기 목차보기](/infra/nextstep/인프라%20공방%205기/infra-workshop-00-overview/)
+
 ---
 
 인프라 공방 5기 : NEXTSTEP 에서 진행하는 '인프라 공방 5기' 1주차 '그럴듯한 인프라 만들기' 실습에 대한 내용을 정리한다.
@@ -40,6 +46,8 @@ toc_label: "목차"
 
 ## pem 키를 어디에 사용할까?
 
+- 생성된 pem 키는 앞으로 EC2에 SSH를 통해 원격으로 접근할 때 이용 된다.
+- 접근할 원격 EC2 에는 생성된 pem 키의 public key가 `~/.ssh` 폴더 하위에 들어가게 되고, private 키는 원격 EC2에 접근하고자 하는 단말기 내에 존재해야 한다.
 
 <br>
 
@@ -141,6 +149,8 @@ toc_label: "목차"
 | 내부망 | EC2-tonyjev93-db     | tonyjev93-internal-01 | tonyjev93-internal | 192.168.10.144  | 3.34.132.214  |
 | 관리망 | EC2-tonyjev93-bastion     | tonyjev93-admin-01 | tonyjev93-admin | 192.168.10.168  | 13.124.44.222 |
 
+<br>
+
 - [x] 베스쳔 서버에 Session Timeout 600s 설정
 
 ```shell
@@ -152,6 +162,11 @@ $ sudo vi ~/.profile
 $ source ~/.profile
 $ env
 ```
+- Timeout 으로 자동 logout
+  - ![img](https://user-images.githubusercontent.com/53864640/164260424-ecbd8b1e-322c-43d4-8405-c7680141b82d.png)
+
+<br>
+
 - [x] 베스쳔 서버에 shell prompt 변경하기
   - 구분해야 하는 서버의 Shell Prompt를 설정하여 관리자의 인적 장애 예방
 
@@ -164,6 +179,8 @@ $ source ~/.bashrc
 ```
 - 반영 후 prompt 모습
   - ![image](https://user-images.githubusercontent.com/53864640/164254496-22ef31ff-a585-46a6-954a-be0245d8ac01.png)
+
+<br>
 
 - [x] 베스쳔 서버에 Command 감사로그 설정
   - 서버에 직접 접속하여 작업할 경우, 작업 이력 히스토리를 기록해두어야 장애 발생시 원인을 분석 할 수 있음.
@@ -187,8 +204,19 @@ $ sudo service rsyslog restart
 $ tail -f /var/log/command.log
 ```
 
+- 사용한 명령어 이력
+  - ![img](https://user-images.githubusercontent.com/53864640/164261301-ad1a5cc2-d1c0-4c8a-ad7e-098a0601a5f7.png)
+
 <br>
 
 # 참고
 
 - [인프라 공방 5기](https://edu.nextstep.camp/c/VI4PhjPA/)
+
+<br>
+
+---
+
+[⬅️ 인프라 공방 5기 목차보기](/infra/nextstep/인프라%20공방%205기/infra-workshop-00-overview/)
+
+---
