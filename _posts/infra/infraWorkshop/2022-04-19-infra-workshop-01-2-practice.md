@@ -29,6 +29,8 @@ toc_label: "목차"
 2. 컨테이너를 학습하고 3 tier로 운영환경을 구성한다.
 3. 개발 환경을 구성해보고 지속적 통합을 경험한다.
 
+<br>
+
 # 0단계 - pem 키 생성하기
 
 ## 요구사항
@@ -135,19 +137,23 @@ toc_label: "목차"
 - [x] 외부망에 웹 서비스용도의 EC2 생성
 - [x] 내부망에 데이터베이스용도의 EC2 생성
 - [x] 관리망에 베스쳔 서버용도의 EC2 생성
-
-- Spec
+- [x] 고정 IP 할당(탄력적 IP 할당)
+  - ![image](https://user-images.githubusercontent.com/53864640/164457913-0a5d67c9-54e5-42c6-b98e-e66fb528d1a0.png)
+  - ![image](https://user-images.githubusercontent.com/53864640/164458114-dea303af-0671-4e9e-9c68-85e9ff90a680.png)
+  
+- **Spec**
   - Amazone Machine Image : Ubuntu 64bit(Ubuntu Server 18.04 LTS)
   - Instance Type : t3.medium
   - Key Pair : KEY-tonyjev93
   - VPC : tonyjev93-vpc
   - 퍼블릭 IP 자동할당 : 활성화
 
-| 구분  | 인스턴스 이름               | 서브넷                   | 보안 그룹              | Private IP     | Public IP     |
-|-----|-----------------------|-----------------------|--------------------|----------------|---------------|
-| 외부망 | EC2-tonyjev93-web     | tonyjev93-external-01 | tonyjev93-external | 192.168.10.26  | 3.35.169.198  |
-| 내부망 | EC2-tonyjev93-db     | tonyjev93-internal-01 | tonyjev93-internal | 192.168.10.144  | 3.34.132.214  |
-| 관리망 | EC2-tonyjev93-bastion     | tonyjev93-admin-01 | tonyjev93-admin | 192.168.10.168  | 13.124.44.222 |
+| 구분  | 인스턴스 이름               | 서브넷                   | 보안 그룹              | Private IP     | Public IP        |
+|-----|-----------------------|-----------------------|--------------------|----------------|------------------|
+| 외부망 | EC2-tonyjev93-web     | tonyjev93-external-01 | tonyjev93-external | 192.168.10.26  | 52.78.72.73(고정)  |
+| 내부망 | EC2-tonyjev93-db     | tonyjev93-internal-01 | tonyjev93-internal | 192.168.10.144  | -                |
+| 관리망 | EC2-tonyjev93-bastion     | tonyjev93-admin-01 | tonyjev93-admin | 192.168.10.168  | 52.79.68.166(고정) |
+
 
 <br>
 
@@ -207,6 +213,16 @@ $ tail -f /var/log/command.log
 - 사용한 명령어 이력
   - ![img](https://user-images.githubusercontent.com/53864640/164261301-ad1a5cc2-d1c0-4c8a-ad7e-098a0601a5f7.png)
 
+<br>
+
+## 웹 애플리케이션 배포
+
+- [x] 외부망에 [웹 애플리케이션](https://github.com/next-step/infra-subway-deploy) 배포
+- [x] DNS 설정 - [http://www.tonyjev93.kro.kr:8080](http://www.tonyjev93.kro.kr:8080) 로 설정 완료
+  - [무료 DNS 설정 사이트](https://xn--220b31d95hq8o.xn--3e0b707e/)
+    - ![image](https://user-images.githubusercontent.com/53864640/164451650-4142cab0-59cb-4d39-9052-0f7cd2627683.png)
+    - ![image](https://user-images.githubusercontent.com/53864640/164451472-e5929ed8-b64d-499e-879e-5c608bf3c636.png)
+    
 <br>
 
 # 참고
