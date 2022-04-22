@@ -225,6 +225,155 @@ $ tail -f /var/log/command.log
     
 <br>
 
+# 2단계 - 배포하기
+
+## 요구사항
+
+- [x] 운영 환경 구성하기
+- [x] 개발 환경 구성하기
+
+### docker 설치
+
+```shell
+$ sudo apt-get update && \
+sudo apt-get install -y apt-transport-https ca-certificates curl software-properties-common && \
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add - && \
+sudo apt-key fingerprint 0EBFCD88 && \
+sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" && \
+sudo apt-get update && \
+sudo apt-get install -y docker-ce && \
+sudo usermod -aG docker ubuntu && \
+sudo curl -L "https://github.com/docker/compose/releases/download/1.23.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose && \
+sudo chmod +x /usr/local/bin/docker-compose && \
+sudo ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose
+```
+
+### docker 명령어 권한 부여
+
+```shell
+# docker 명령어 권한 부여
+$ sudo usermod -aG docker $(whoami)
+$ sudo reboot
+```
+
+## 운영 환경 구성하기
+
+- [x] 웹 애플리케이션 앞단에 Reverse Proxy 구성하기
+  - [x] 외부망에 Nginx로 Reverse Proxy를 구성
+    - [nginx 설정값](https://prohannah.tistory.com/136)
+  - [x] Reverse Proxy 에 TLS 설정
+    - letsencrypt를 활용한 무료 TLS 인증서 사용
+    - ```shell
+  $ docker run -it --rm --name certbot \
+  -v '/etc/letsencrypt:/etc/letsencrypt' \
+  -v '/var/lib/letsencrypt:/var/lib/letsencrypt' \
+  certbot/certbot certonly -d 'tonyjev93.kro.kr' --manual --preferred-challenges dns --server https://acme-v02.api.letsencrypt.org/directory
+  ```
+
+![image](https://user-images.githubusercontent.com/53864640/164715016-71cef179-c8b2-4975-b13f-504ea10508c5.png)
+
+- [무료 DNS 설정 사이트](https://xn--220b31d95hq8o.xn--3e0b707e/) 에서 DNS TXT 레코드로 추가한다.
+
+![image](https://user-images.githubusercontent.com/53864640/164715140-2def3578-a325-41f4-b7b2-a8ec8eff3c62.png)
+
+- 생성된 인증서 현재 경로로 옮기기
+
+```shell
+$ cp /etc/letsencrypt/live/[도메인주소]/fullchain.pem ./
+$ cp /etc/letsencrypt/live/[도메인주소]/privkey.pem ./
+```
+
+- nginx Dockerfile 수정
+
+```
+FROM nginx
+
+COPY nginx.conf /etc/nginx/nginx.conf 
+COPY fullchain.pem /etc/letsencrypt/live/[도메인주소]/fullchain.pem
+COPY privkey.pem /etc/letsencrypt/live/[도메인주소]/privkey.pem
+```
+
+- nginx.conf 파일 수정
+
+```
+...
+
+http {       
+  upstream app {
+    server 172.17.0.1:8080;
+  }
+  
+  # Redirect all traffic to HTTPS
+  server {
+    listen 80;
+    return 301 https://$host$request_uri;
+  }
+
+  server {
+    listen 443 ssl;  
+    ssl_certificate /etc/letsencrypt/live/[도메인주소]/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/[도메인주소]/privkey.pem;
+
+    # Disable SSL
+    ssl_protocols TLSv1 TLSv1.1 TLSv1.2;
+
+    # 통신과정에서 사용할 암호화 알고리즘
+    ssl_prefer_server_ciphers on;
+    ssl_ciphers ECDH+AESGCM:ECDH+AES256:ECDH+AES128:DH+3DES:!ADH:!AECDH:!MD5;
+
+    # Enable HSTS
+    # client의 browser에게 http로 어떠한 것도 load 하지 말라고 규제합니다.
+    # 이를 통해 http에서 https로 redirect 되는 request를 minimize 할 수 있습니다.
+    add_header Strict-Transport-Security "max-age=31536000" always;
+
+    # SSL sessions
+    ssl_session_cache shared:SSL:10m;
+    ssl_session_timeout 10m;      
+
+    location / {
+      proxy_pass http://app;    
+    }
+  }
+}
+```
+
+- Docker 재빌드 및 재실행
+
+```shell
+$ docker stop proxy && docker rm proxy
+$ docker build -t nextstep/reverse-proxy .
+$ docker run -d -p 80:80 -p 443:443 --name proxy nextstep/reverse-proxy
+```
+
+- [x] 운영 데이터베이스 구성하기
+
+```shell
+# 실습용 DB (id : root / password: masterpw)
+$ docker run -d -p 3306:3306 brainbackdoor/data-subway:0.0.1
+```
+
+## 개발 환경 구성하기
+
+- [x] 설정 파일 나누기
+  - Junit : h2
+  - Local : docker(mysql)
+  - Prod : 운영 DB를 사용하도록 설정
+
+``` 
+application-local.properties
+application-prod.properties
+application-test.properties
+```
+
+- 위와 같이 properties 파일들을 배포 환경 별로 나눌 수 있음
+- jar 실행 시 `-Dspring.profiles.active=prod` 옵션을 통해 설정 파일을 결정할 수 있다.
+
+```shell
+$ java -jar -Dspring.profiles.active=prod [jar파일명]
+```
+
+<br>
+
 # 참고
 
 - [인프라 공방 5기](https://edu.nextstep.camp/c/VI4PhjPA/)
