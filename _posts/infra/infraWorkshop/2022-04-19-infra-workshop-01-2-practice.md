@@ -1,6 +1,6 @@
 ---
 title: "[인프라 공방 5기] 1주차 - 그럴듯한 인프라 만들기(2) : 실습"
-last_modified_at: 2022-04-20T23:00:00+09:00
+last_modified_at: 2022-04-24T00:50:00+09:00
 categories:
     - Infra
     - NEXTSTEP
@@ -370,6 +370,101 @@ application-test.properties
 
 ```shell
 $ java -jar -Dspring.profiles.active=prod [jar파일명]
+```
+
+<br>
+
+# 3단계 - 배포 스크립트 작성하기
+
+- [x] 배포 스크립트 작성하기 
+  - 반복적으로 사용하는 명령어를 Script로 작성해 본다.
+
+## 변수 설정
+
+```shell
+# ./color.sh
+
+## 변수 설정
+txtrst='\033[1;37m' # White
+txtred='\033[1;31m' # Red
+txtylw='\033[1;33m' # Yellow
+txtpur='\033[1;35m' # Purple
+txtgrn='\033[1;32m' # Green
+txtgra='\033[1;30m' # Gray
+```
+
+```shell
+# ./colorTest.sh
+source $(dirname $0)/color.sh
+
+echo -e "${txtylw}=======================================${txtrst}"
+echo -e "${txtgrn}  << 색깔 변수들 🧐 >>${txtrst}"
+echo -e "${txtrst}txtrst='\033[1;37m' # White${txtrst}"
+echo -e "${txtred}txtred='\033[1;31m' # Red${txtrst}"
+echo -e "${txtylw}txtylw='\033[1;33m' # Yellow${txtrst}"
+echo -e "${txtpur}txtpur='\033[1;35m' # Purple${txtrst}"
+echo -e "${txtylw}txtgrn='\033[1;32m' # Green${txtrst}"
+echo -e "${txtgra}txtgra='\033[1;30m' # Gray${txtrst}"
+echo -e "${txtylw}=======================================${txtrst}"
+```
+
+<<출력 결과>>
+{: .text-center}
+![image](https://user-images.githubusercontent.com/53864640/164912098-a02b7845-dc24-4e68-93e7-4f090374f1d2.png){: .align-center}
+
+## 기능 단위 함수선언
+
+```shell
+# ./functionTest.sh
+source $(dirname $0)/color.sh
+
+function pull() {
+
+  echo -e ">> Pull Request 🏃"
+  git pull origin tonyjev93
+}
+
+pull;
+```
+
+## 파라미터 전달
+
+```shell
+# ./parameterTest.sh
+source $(dirname $0)/color.sh
+
+# 변수 선언
+EXECUTION_PATH=$(pwd) # 해당 스크립트를 실행시킨 경로
+SHELL_SCRIPT_PATH=$(dirname $0) # 해당 스크립트의
+FIRST=$1 # 1 번째 입력 값
+SECOND=$2 # 2 번째 입력 값
+
+# 변수 출력
+echo -e "${txtylw}============= 변수 출력 ===============${txtrst}"
+echo -e "${txtgrn} EXECUTION_PATH: ${EXECUTION_PATH}"
+echo -e "${txtgrn} SHELL_SCRIPT_PATH: ${SHELL_SCRIPT_PATH}"
+echo -e "${txtgrn} FIRST: ${FIRST}"
+echo -e "${txtgrn} SECOND: ${SECOND}"
+echo -e "${txtgrn} \$#: $#"  # 입력 인자 개수
+
+## 조건 설정
+if [[ $# -ne 0 ]] # 입력 인자 개수($#) 가 0이 아닌 경우(-ne)
+then
+    echo -e "${txtylw}=======================================${txtrst}"
+    echo -e "${txtgrn}  << 스크립트 🧐 >>${txtrst}"
+    echo -e ""
+    echo -e "${txtgrn} $0 브랜치이름 ${txtred}{ prod | dev }"
+    echo -e "${txtylw}=======================================${txtrst}"
+    exit
+fi
+
+## ...
+```
+
+- 실행 명령어
+```shell
+# $0 = ./parameterTest.sh, $1 = first, $2 = second
+$ ./parameterTest.sh first second 
 ```
 
 <br>
