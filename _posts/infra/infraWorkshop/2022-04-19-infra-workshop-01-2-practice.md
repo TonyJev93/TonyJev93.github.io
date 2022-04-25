@@ -467,6 +467,97 @@ fi
 $ ./parameterTest.sh first second 
 ```
 
+## 반복적으로 동작(crontab)
+
+cron 
+: 소프트웨어 데몬
+: 유닉스 계열 시간 기반 작업 스케쥴러
+: crontab 이라는 파일에 의해 구동 됨
+: 리눅스 User 마다의 crontab 파일을 가질 수 있음
+
+- 두 가지 방식
+  1. /etc/crontab 파일
+  2. crontab -e 명령어
+
+### 1. /etc/crontab 파일
+
+- 관리자 권한 접근 필요
+
+```shell
+$ sudo -i
+```
+
+- crontab 파일 수정
+
+```shell
+$ sudo vi /etc/crontab
+```
+
+```shell
+- Crontab 규칙
+
+* * * * *  유저이름 명령어
+┬ ┬ ┬ ┬ ┬
+│ │ │ │ └─ 요일 (0 - 6) (0:일요일, 1:월요일, 2:화요일, …, 6:토요일)
+│ │ │ └─ 월 (1 - 12)
+│ │ └─일 (1 - 31)
+│ └─ 시 (0 - 23)
+└─ 분 (0 - 59)
+```
+
+- 예시
+
+![image](https://user-images.githubusercontent.com/53864640/165104891-642df82f-eff4-481e-94e2-6dd32db25b46.png)
+
+```shell
+# m h dom mon dow user  command
+  * *  *   *   *  root  /home/ubuntu/nextstep/infra-subway-deploy/test.sh >> /var/log/cron.log
+```
+
+- 매분 마다 `/home/ubuntu/nextstep/infra-subway-deploy/test.sh` 명령어를 수행하며, `/var/log/cron.log` 파일에 log 를 남긴다.
+  - `>` : 기존 로그를 삭제(truncate)하고 신규 로그 추가
+  - `>>` : 기존 로그 + 신규 로그(누적)
+
+### 2. crontab -e 명령어
+
+- crontab 관련 명령어들
+  - `crontab -l` : 사용중인 크론탭 리스트 확인
+  - `crontab -e` : 크론탭 수정
+  - `crontab -r` : 모든 크론탭 삭제하기
+  - `service cron start` : 크론탭 실행하기
+  - `service cron status` : 크론탭 상태 확인하기
+  - `service cron stop` : 크론탭 중지하기
+  - `service cron restart` : 크론탭 재시작하기
+
+**[사용 방법]**
+- 계정 별 crontab 설정이 가능하므로 실행시킬 계정으로 접속
+- `crontab -e` 명령어 수행 - 최초에 편집기 선택하도록 나옴(default : `nano`)
+  - 추 후, vim 편집기로 변경을 원한다면 `export VISUAL=vim; crontab -e` 명령어 수행
+- crontab 파일 수정
+  
+```shell
+# m h  dom mon dow   command
+  * *  *   *   *    /home/ubuntu/nextstep/infra-subway-deploy/test.sh > /home/ubuntu/nextstep/infra-subway-deploy/cron-by-e.log
+```
+- 크론탭 실행 : `service cron start`
+
+**[참고]**
+
+- crontab 수행이 안될 때
+  - `crontab status` 명령어 수행 시 `(CRON) info (No MTA installed, discarding output)`이라는 로그가 존재한다면,
+  - `sudo apt-get install postfix` 명령어 수행
+  - ![image](https://user-images.githubusercontent.com/53864640/165108137-ba55d988-9617-403c-a5e6-3a93272404a8.png)
+  - 위 와 같은 화면이 나타나면 `No configuration` 선택 후 OK 누르면 됨.(email 서버 선택하라는 화면인데 무시.)
+- Ubuntu 서버 시간설정
+  - `date` 명령어로 현재 세팅된 시스템 시간 확인(기본 세팅 : UTC)
+  - UTC -> KST 변경
+    - 관리자 권한으로 변경 : `sudo -i`
+    - `dpkg-reconfigure tzdata` 명령어 수행
+    - ![image](https://user-images.githubusercontent.com/53864640/165113721-86fdde86-3255-46b4-89e1-00085f1129e3.png)
+    - 위와 같은 화면이 등장 하면 **Asia** 선택 후 OK
+    - ![image](https://user-images.githubusercontent.com/53864640/165112706-75fd478c-3436-47e8-b1ef-34a3cd2bffa1.png)
+    - 위와 같이 **Seoul** 선택 후 OK
+
 <br>
 
 # 참고
