@@ -14,6 +14,9 @@ toc_sticky: true
 toc_label: "목차"
 ---
 
+인프라 공방 5기 : NEXTSTEP 에서 진행하는 '인프라 공방 5기' 1주차 '그럴듯한 인프라 만들기' 실습에 앞서 이에 필요한 배경지식을 정리한다.
+{: .notice--info}
+
 ---
 
 <div style="
@@ -25,10 +28,6 @@ toc_label: "목차"
 </div>
 
 ---
-
-인프라 공방 5기 : NEXTSTEP 에서 진행하는 '인프라 공방 5기' 1주차 '그럴듯한 인프라 만들기' 실습에 앞서 이에 필요한 배경지식을 정리한다.
-{: .notice--info}
-
 
 # 1. 왜 Public Cloud 인가요?
 

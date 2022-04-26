@@ -14,14 +14,14 @@ toc_sticky: true
 toc_label: "목차"
 ---
 
+인프라 공방 5기 : NEXTSTEP 에서 진행하는 '인프라 공방 5기' 1주차 '그럴듯한 인프라 만들기' 실습에 대한 내용을 정리한다.
+{: .notice--info}
+
 ---
 
 [⬅️ 인프라 공방 5기 목차보기](/infra/nextstep/인프라%20공방%205기/infra-workshop-00-overview/)
 
 ---
-
-인프라 공방 5기 : NEXTSTEP 에서 진행하는 '인프라 공방 5기' 1주차 '그럴듯한 인프라 만들기' 실습에 대한 내용을 정리한다.
-{: .notice--info}
 
 # 학습 목표
 
