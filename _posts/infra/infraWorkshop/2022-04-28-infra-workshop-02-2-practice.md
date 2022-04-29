@@ -116,23 +116,79 @@ VUser = (목표 rps * T) / R
 
 ## 대시보드 구성
 
-### influx db 설치
+### influx db
 
-- influx는 오픈 소스 기반의 시계열 데이터베이스이다.(시간 흐름을 중심으로 데이터 관리)
-- 운영 모니터링, 애플리케이션 매트릭스, 사물인터넷 센서 데이터, 실시간 분석 등 분야에서 최적화 되어있다.
-- influx db는 8086 포트 점유
+- 특징
+  - influx는 오픈 소스 기반의 시계열 데이터베이스이다.(시간 흐름을 중심으로 데이터 관리)
+  - 운영 모니터링, 애플리케이션 매트릭스, 사물인터넷 센서 데이터, 실시간 분석 등 분야에서 최적화 되어있다.
+  - influx db는 8086 포트 점유
+- 설치
 
 ```shell
+$ sudo curl -sL https://repos.influxdata.com/influxdb.key | sudo apt-key add -
+$ sudo echo "deb https://repos.influxdata.com/ubuntu bionic stable" | sudo tee /etc/apt/sources.list.d/influxdb.list
+$ sudo apt update
 $ sudo apt install influxdb
 ```
+ 
+- 실행
 
-### grafana 설치
+```shell
+# 서비스 중지
+$ sudo systemctl stop influxdb
+
+# 서비스 시작
+$ sudo systemctl start influxdb
+
+# 서버 재시작 후 자동 실행
+$ sudo systemctl enable --now influxdb
+$ sudo systemctl is-enabled influxdb
+  
+# 서비스 상태 확인
+$ sudo systemctl status influxdb
+
+# 서비스 헬스 체크
+$ curl {server_ip}:8086/health
+```
+
+- 설정 
+
+```shell
+$ sudo nano /etc/influxdb/influxdb.conf
+```
+
+```
+[http]
+# Determines whether HTTP endpoint is enabled.
+enabled = true <-- 주석 제거
+# Determines whether the Flux query endpoint is enabled.
+# flux-enabled = false
+```
+
+- 계정 생성 및 접속
+
+```shell
+# 계정 생성
+$ curl -XPOST "http://{server_ip}:8086/query" --data-urlencode "q=CREATE USER {user_name} WITH PASSWORD '{your_password}' WITH ALL PRIVILEGES"
+
+# 계정 접속
+$ influx -username '{user_name}' -password '{your_password}'
+
+# Query TEST
+$ curl -G http://{server_ip}:8086/query -u {user_name}:{your_password} --data-urlencode "q=SHOW DATABASES" 
+```
+
+### grafana
+
+<br>
+
+**특징**
 
 - grafana 시계열 데이터랑 메트릭 정보를 보여주기 위한 오픈소스 대시보드 툴
 - Graphite, Elasticsearch, OpenTSDB, Prometheus, InfluxDB, Cloudwatch 등을 데이터 소스로 이용
 - grafana는 3000 포트 점유
 
-- 설치
+**설치**
 
 ```shell
 $ sudo apt-get update && sudo apt-get upgrade -y 
@@ -144,13 +200,51 @@ $ sudo apt-get update
 $ sudo apt-get install grafana
 ```
 
-- 실행
+**실행**
 
 ```shell
 $ service grafana-server start
 ```
+ 
+**접속** 
+- 브라우저로 `{server_ip}:3000` 접속
+- 초기 계정(id/password) : `admin / admin`
 
+**Datasource 설정**
 
+- Configuration > Data Source
+
+![img](https://user-images.githubusercontent.com/53864640/165964409-9bcc198b-92c8-47be-bb41-d6a30d88a96f.png)
+
+![image](https://user-images.githubusercontent.com/53864640/165978922-3eb4ee2a-d63b-40b2-b2e5-44aed8c8743a.png)
+
+- URL에 influxDB 접속 URL 입력
+
+![image](https://user-images.githubusercontent.com/53864640/165978965-181f820e-1291-4191-879b-1fdc85f3eb01.png)
+
+- Database 에 본인의 influxDB에서 생성된 DB 이름 입력
+- User/Password 에 본인이 생성한 계정을 입력
+
+**Dashboard 설정**
+
+- Dashboard > import
+  - URL: [https://grafana.com/grafana/dashboards/2587](https://grafana.com/grafana/dashboards/2587) 입력
+
+![img](https://user-images.githubusercontent.com/53864640/165978645-116b6295-355b-4653-a17c-df2e095141c7.png)
+
+![image](https://user-images.githubusercontent.com/53864640/165979405-abe7b6bd-3a20-4eea-8622-b85da307875a.png)
+
+- k6 > InfluxDB 선택
+
+**테스트 시작**
+
+```shell
+$ k6 run --out influxdb=http://{server_ip}:8086/{database} {test_script.js}
+```
+
+- Dashboard 화면
+
+![image](https://user-images.githubusercontent.com/53864640/165981757-6a85eec6-52ba-4906-afc0-12b15b1e76de.png)
 
 <br>
 
