@@ -18,12 +18,12 @@ toc_label: "목차"
 {: .notice--info}
 
 ---
-
 <div style="
   display: flex;
   justify-content: space-between;
 ">
   <a href="/infra/nextstep/인프라%20공방%205기/infra-workshop-00-overview/">⬅️ 인프라 공방 5기 목차보기</a>
+  <a href="/infra/nextstep/인프라%20공방%205기/infra-workshop-02-2-practice/"> 2주차 - 성능 진단하기(2) : 실습 보러가기 ➡️️</a>
 </div>
 
 ---
