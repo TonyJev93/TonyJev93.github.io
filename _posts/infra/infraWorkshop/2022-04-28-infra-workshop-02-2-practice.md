@@ -95,6 +95,7 @@ $ k6 run --vus 10(가상 사용자 수) --duration 30s(부하시간) --out csv=t
     - 1일 총 접속 수 = 1일 사용자 수(DAU) x 1명당 1일 평균 접속 수
     - 1일 평균 rps = 1일 총 접속 수 / 86,400 (초/일)
     - 1일 최대 rps = 1일 평균 rps x 피크 시간대 집중률(최대 트래픽 / 평소 트래픽)
+
 ### VUser 구하기
   - Request Rate(rps) : 1초당 요청 수
   - VU : 가상 사용자 수
@@ -178,9 +179,9 @@ $ influx -username '{user_name}' -password '{your_password}'
 $ curl -G http://{server_ip}:8086/query -u {user_name}:{your_password} --data-urlencode "q=SHOW DATABASES" 
 ```
 
-### grafana
-
 <br>
+
+### grafana
 
 **특징**
 
@@ -283,6 +284,12 @@ $ k6 run --out influxdb=http://{server_ip}:8086/{database} {test_script.js}
 - `INFO` : 운영에 참고할만한 사항으로 중요한 비즈니스 프로세스를 로깅
 - `DEBUG/TRACE` : 개발 단계에서만 사용. 운영 단계에서는 사용하지 않음
     
+
+**logback 설정 참고**
+- [https://bamdule.tistory.com/29](https://bamdule.tistory.com/29) <- 정리 잘되어 있는 블로그
+
+<br>
+
 ### Nginx Access Log 설정하기
 
 - Docker의 volume 옵션을 통해 호스트 경로와 도커 경로를 마운트 한다.
