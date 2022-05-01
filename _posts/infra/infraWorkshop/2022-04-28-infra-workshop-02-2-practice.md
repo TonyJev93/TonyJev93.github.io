@@ -248,6 +248,79 @@ $ k6 run --out influxdb=http://{server_ip}:8086/{database} {test_script.js}
 
 <br>
 
+# 로깅, 모니터링
+
+## 요구사항
+
+- [x] 애플리케이션 진단하기 실습을 진행해보고 문제가 되는 코드를 수정
+- [x] 로그 설정하기
+- [x] Cloudwatch로 모니터링
+
+## 로그 설정하기
+
+### Application Log 파일로 저장하기 
+
+- [x] 회원가입, 로그인 등의 이벤트에 로깅을 설정
+- [x] 경로찾기 등의 이벤트 로그를 JSON으로 수집
+
+**주의사항**
+
+- Avoid side effects
+  - logging으로 인한 애플리케이션 동작에 영향을 미쳐서는 안된다.
+  - ex) logging 시점에 NPE가 발생해 프로그램이 정상적으로 동작하지 않는 상황이 발생하면 안됨
+- Be concise descriptive
+  - 각 Logging에는 데이터와 설명이 모두 포함되어있어야 함
+- Log method arguments and return values
+  - 메소드의 Input, Output을 로그로 남기면 Debugger를 사용하지 않아도 됨.(Debugger를 사용할 수 없는 상황에서 유용)
+  - AOP를 활용하여 메소드 앞, 뒤 부분에 발생할 중복 코드를 제거한다.
+- Delete personal information
+  - 로그에 사용자의 개인정보(전화번호, 계좌번호, 패스워드, 주소 등)를 남기지 않는다.
+
+**logging level**
+
+- `ERROR` : 예상하지 못한 심각한 문제가 발생하여 즉시 조치 필요
+- `WARN` : 로직상 유효성 확인, 예상 가능한 문제로 인한 예외처리 등. 서비스 운영은 가능하지만 주의해야 함
+- `INFO` : 운영에 참고할만한 사항으로 중요한 비즈니스 프로세스를 로깅
+- `DEBUG/TRACE` : 개발 단계에서만 사용. 운영 단계에서는 사용하지 않음
+    
+### Nginx Access Log 설정하기
+
+- Docker의 volume 옵션을 통해 호스트 경로와 도커 경로를 마운트 한다.
+
+```shell
+$ docker run -d -p 80:80 -v /var/log/nginx:/var/log/nginx nextstep/reverse-proxy
+```
+
+<br>
+
+**cAdvisor**
+
+- 도커 상태 모니터링
+- 설치
+    ```shell
+    docker run \
+      --volume=/:/rootfs:ro \
+      --volume=/var/run:/var/run:ro \
+      --volume=/sys:/sys:ro \
+      --volume=/var/lib/docker/:/var/lib/docker:ro \
+      --volume=/dev/disk/:/dev/disk:ro \
+      --publish=8080:8080 \
+      --detach=true \
+      --name=cadvisor \
+      google/cadvisor:latest
+    ```
+- 모니터링에 필요한 디렉토리 볼륨 지정(보안을 위해 읽기전용 사용 `:ro`)
+- 8080포트 개방 필요
+
+
+## Cloudwatch로 모니터링
+
+### Cloudwatch로 로그 수집하기
+### Cloudwatch로 메트릭 수집하기
+### USE 방법론을 활용하기 용이하도록 대시보드 구성
+
+<br>
+
 # 참고
 
 - [인프라 공방 5기](https://edu.nextstep.camp/c/VI4PhjPA/) - 강의자료
