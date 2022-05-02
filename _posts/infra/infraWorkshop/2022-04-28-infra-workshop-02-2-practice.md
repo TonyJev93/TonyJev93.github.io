@@ -322,9 +322,141 @@ $ docker run -d -p 80:80 -v /var/log/nginx:/var/log/nginx nextstep/reverse-proxy
 
 ## Cloudwatch로 모니터링
 
+- IAM Role 설정 (in 모니터링 대상 EC2)
+
+![image](https://user-images.githubusercontent.com/53864640/166231791-4483862c-8460-4769-99c5-8393e812c3f3.png)
+
+![image](https://user-images.githubusercontent.com/53864640/166231811-1d3dc8af-c3b0-4428-ac06-9cb16c2624bf.png)
+
+- 설치
+
+```shell
+# 설치
+$ curl https://s3.amazonaws.com/aws-cloudwatch/downloads/latest/awslogs-agent-setup.py -O
+
+# 파이썬 설치
+$ sudo apt install python
+
+# 실행
+$ sudo python ./awslogs-agent-setup.py --region  ap-northeast-2
+# ㄴ Access Key, Secret Key 등 하지 말것! IAM Role 설정으로 충분함
+```
+
 ### Cloudwatch로 로그 수집하기
+
+- 설정파일 수정
+
+```shell
+$ sudo vi /var/awslogs/etc/awslogs.conf
+```
+
+```
+[/var/log/syslog]
+datetime_format = %b %d %H:%M:%S
+file = /var/log/syslog
+buffer_duration = 5000
+log_stream_name = {instance_id}
+initial_position = start_of_file
+log_group_name = [로그그룹 이름]
+
+[/var/log/nginx/access.log]
+datetime_format = %d/%b/%Y:%H:%M:%S %z
+file = /var/log/nginx/access.log
+buffer_duration = 5000
+log_stream_name = access.log
+initial_position = end_of_file
+log_group_name = [로그그룹 이름]
+
+[/var/log/nginx/error.log]
+datetime_format = %Y/%m/%d %H:%M:%S
+file = /var/log/nginx/error.log
+buffer_duration = 5000
+log_stream_name = error.log
+initial_position = end_of_file
+log_group_name = [로그그룹 이름]
+```
+
+- `[로그그룹 이름]` : 개인의 github id로 지정
+
+```shell
+$ sudo service awslogs restart
+```
+
 ### Cloudwatch로 메트릭 수집하기
+
+```shell
+$ wget https://s3.amazonaws.com/amazoncloudwatch-agent/ubuntu/amd64/latest/amazon-cloudwatch-agent.deb
+$ sudo dpkg -i -E ./amazon-cloudwatch-agent.deb
+```
+
+```json
+{
+  "agent": {
+    "metrics_collection_interval": 60,
+    "run_as_user": "root"
+  },
+  "metrics": {
+    "metrics_collected": {
+      "disk": {
+        "measurement": [
+          "used_percent",
+          "used",
+          "total"
+        ],
+        "metrics_collection_interval": 60,
+        "resources": [
+          "*"
+        ]
+      },
+      "mem": {
+        "measurement": [
+          "mem_used_percent",
+          "mem_total",
+          "mem_used"
+        ],
+        "metrics_collection_interval": 60
+      }
+    }
+  }
+}
+```
+
+```shell
+$ sudo /opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl -a fetch-config -m ec2 -s -c file:/opt/aws/amazon-cloudwatch-agent/bin/config.json
+$ sudo /opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl -m ec2 -a status
+
+# -- status -- #
+{
+  "status": "running",
+  "starttime": "2022-05-02T12:25:34+00:00",
+  "configstatus": "configured",
+  "cwoc_status": "stopped",
+  "cwoc_starttime": "",
+  "cwoc_configstatus": "not configured",
+  "version": "1.247350.0b251780"
+}
+```
+
 ### USE 방법론을 활용하기 용이하도록 대시보드 구성
+
+- AWS 검색창에 Cloudwatch 입력
+
+![img](https://user-images.githubusercontent.com/53864640/166233892-3084b600-3024-46a7-9861-bb53eabc8ff4.png)
+
+- 위젯 추가 > 행 선택
+
+![img](https://user-images.githubusercontent.com/53864640/166233900-f923da18-81a9-4af1-a485-6a5ae02601de.png)
+
+- 지표 선택
+
+![img](https://user-images.githubusercontent.com/53864640/166236273-6ca84a98-88c5-4eac-95cc-9784d37fff07.png)
+
+- 검색어에 모니터링을 원하는 필드 입력
+  - CPU Utilization, Network In / Out, mem_used_percent, disk_used_percent 등 추가
+
+![img](https://user-images.githubusercontent.com/53864640/166235947-bb4061d6-6907-4b35-976a-b74557753795.png)
+
+- 최종 대시보드 구성 모습
 
 <br>
 
