@@ -55,6 +55,7 @@ toc_label: "목차"
   - [성능 지표 참고](/infra/%EC%9B%B9%20%EC%84%B1%EB%8A%A5%20%EC%98%88%EC%82%B0/infra-web-performance-budget/)
 - 타사 비교
   - [PageSpeed](https://pagespeed.web.dev) 기준 측정결과
+
 |                | 서울교통공사  | 네이버지도  |  카카오맵  | 내 서비스 |
 |:--------------|:-------|:------|:------|:------|
 |     FCP(s)     |   7.3   |  2.2   |  1.7   | 14.6  |
