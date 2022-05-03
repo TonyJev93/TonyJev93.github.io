@@ -111,7 +111,7 @@ toc_label: "목차"
     - 스크립트 최대 갯수
     - HTML, CSS 최대 크기
     - 동영상 최대 크기
-  - 시간 지표
+  - [시간 지표](/infra/%EC%9B%B9%20%EC%84%B1%EB%8A%A5%20%EC%98%88%EC%82%B0/infra-web-performance-budget/)
     - FCP, LCP, TTI, TBT, CLS 등 pagespeed에서 제공하는 데이터
   - 규칙 지표
     - WebPageTest, pagespeed 등 웹 사이트에서 측정한 점수를 지표로 사용

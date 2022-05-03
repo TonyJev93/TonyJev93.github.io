@@ -36,7 +36,27 @@ toc_label: "목차"
 
 <br>
 
-# 부하테스트
+# 1단계 - 웹 성능 테스트
+
+## 요구사항
+
+- [x] 웹 성능 테스트
+  - [x] 웹 성능 예산을 작성
+  - [x] [WebPageTest](https://www.webpagetest.org), [PageSpeed](https://pagespeed.web.dev) 등 테스트해보고 개선이 필요한 부분을 파악
+
+## 요구사항 설명
+
+- [인프라공방 지하철 모니터링 git](https://github.com/next-step/infra-subway-monitoring)
+- README 에 있는 질문에 답을 추가한 후 PR을 보내고 리뷰요청
+
+## 웹 성능 테스트
+
+- 웹 성능 예산 작성
+  - [성능 지표 참고](/infra/%EC%9B%B9%20%EC%84%B1%EB%8A%A5%20%EC%98%88%EC%82%B0/infra-web-performance-budget/)
+
+<br>
+
+# 2단계 - 부하테스트
 
 ## 요구사항
 
