@@ -105,8 +105,30 @@ $ curl -I edu.nextstep.camp
   - 일정 시간이 지나면 nginx 등의 서버가 능동적으로 연결을 끊음
   - Apache, Nginx 등 웹 애플리케이션에서 설정된 기간까지 최대한 연결을 유지하기 위해 사용
 
+## HTTP 2.0
+
+### HTTP 2.0에 대한 요구사항
+
+![img](https://techcourse-storage.s3.ap-northeast-2.amazonaws.com/80d9210dd96c44d7be0bd575c41e3759)
+
+- 기존 스펙 문서를 활용하여 HTTP 메서드, 상태 코드, URI, 헤더 필드를 비롯한 HTTP 1.1의 기본 틀은 유지 해야함
+- TCP를 사용하며, 대부분의 경우 HTTP 1.1 보다 대폭적으로 사용자단의 레이턴시를 개선해야 함
+- 병렬화를 위해 서버에 다수의 커넥션을 요구하지 않고 혼잡 제어에 있어서 TCP 사용 효율을 높여야 한다.
+- HTTP1.1의 문제점인 HOL(Head of Line Blocking) 블로킹을 해결해야 한다. 
 
 <br>
+
+## Contents-encoding
+
+- 텍스트 기반 자산의 인코딩 및 전송 크기 최적화
+- 텍스트 파일(js, css, html)의 압축률은 70~80%
+
+### GZIP 을 사용한 텍스트 압축
+
+- GZIP은 텍스트 기반 자산인 CSS, 자바스크립트, HTML에서 최상의 성능을 보임
+- 모든 최신 브라우저는 GZIP 압축을 지원하고 이를 자동으로 요청할 수 있음
+- 서버는 GZIP 압축을 활성화하도록 구성해야 함
+- 일부 CDN의 경우 특별히 주의하여 GZIP이 활성화되었는지 확인해야 함
 
 # 참고
 
