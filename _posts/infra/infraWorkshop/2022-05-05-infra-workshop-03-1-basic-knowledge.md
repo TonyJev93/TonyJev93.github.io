@@ -241,6 +241,114 @@ _출처 : [인프라 공방 5기](https://edu.nextstep.camp/c/VI4PhjPA/) - 강�
 
 결론, Index 사용 시 Random I/O 횟수 줄이는 것이 목표!
 
+### 수직 / 수평 탐색
+
+인덱스 탐색과저은 스캔 시작시점을 찾는 **수직적 탐색**과 데이터를 찾는 **수평적 탐색**으로 나뉜다.<br>
+이에 대해 MySQL InnoDB 기준 기본 인덱스 구조인 B-Tree 기준으로 설명하도록 한다.
+
+<img width="588" alt="image" src="https://user-images.githubusercontent.com/53864640/167659315-2b63b992-cf5c-493a-ab32-5ebf3dee3eb2.png">{: .align-center}
+_출처 : [MySQL 8.0 Reference Manual](https://dev.mysql.com/doc/refman/8.0/en/create-index.html)_
+{: .text-center}
+
+- **수직적 탐색**
+  - 인덱스 수직적 탐색은 **루트 노드에서부터 시작**한다.
+  - **루트 노드와 브랜치 노드**는 인덱스 키와 자식 노드 정보로 구성된 **페이지**(단위)이다.
+  - 수직적 탐색 과정에 찾고자 하는 값보다 **크거나 같은 값을 만나면**, 바로 **직전 레코드가 가리키는 하위 노드로 이동**한다.
+  - InnoDB의 경우 Secondary Index를 통해 알아낸 Primary Key로 한번 더 수직적 탐색이 이루어진다.
+- **수평적 탐색**
+  - 수직적 탐색을 통해 스캔 시작점을 찾았으면 수평적 탐색을 통해 데이터를 찾는다.
+  - 인덱스 리프 노드끼리는 양방향 Linked List이므로 서로 앞뒤 블록에 대한 주소값을 갖는다.
+  - 필요한 컬럼을 인덱스가 모두 갖고 있어 인덱스만 스캔하고 끝나는 경우도 있지만, 그렇지 않을 경우 테이블도 액세스해야 한다.
+  - 이 때, ROWID가 필요하며, ROWID는 `데이터블럭 주소 + 로우 번호(블록내 순번)`로 구성된다.
+  - InnoDB의 경우, Primary Key 가 ROWID 역할을 합니다.
+  - Primary Key는 Clustered Index, 즉 순차적으로 저장되어 있어 Data record의 물리적인 위치를 알 수 있기 때문이다.
+  - ROWID가 가리키는 데이터 페이지를 버퍼풀에서 먼저 찾아보고 못찾을 때만 디스크에서 블록을 읽는다. (읽은 후에는 버퍼풀에 적재.)
+
+일단, 강의노트에 있는 내용을 적어보았지만 현재 나의 지식으로는 이해하기 어렵다...(나중에 공부를 더 해보는 걸로)
+
+### 인덱스 튜닝
+
+인덱스 튜닝에는 크게 **인덱스 스캔 효율화**와 **랜덤 액세스 최소화** 두가지가 있다. 
+
+후자는 인덱스 스캔 후 테이블 레코드를 액세스할 때, 랜덤 I/O 횟수를 줄이는 것을 의미한다. 학생 명부를 뒤지는 과정에서의 비효율보다, 학생 명부에 없는 정보를 위해 직접 교실에 가는 부담이 더 크듯, 랜덤 액세스 최소화 튜닝이 더 중요하다.
+
+### 인덱스 손익분기점
+
+Table Full Scan의 성능은 **시퀀셜 액세스 방식**이기 때문에 데이터 수(1건 이나 1000만 건 이나)에 상관없이 일정하게 유지된다.<br>
+반면, 인덱스(ROWID)를 이용한 테이블 액세스는 **랜덤 액세스 방식**이기 때문에  점점 느려진다.
+
+테이블 데이터가 10~100만건 이내의 경우 조회 건수가 5~20% 가량에서 손익분기점이 형성된다.
+조회건수가 늘수록 데이터를 버퍼캐시에서 찾을 가능성이 낮아지기 때문에, 1000만건 중 100만건 이상 액세스한다면 캐시 히트율은 극히 낮을 수밖에 없다.<br>
+게다가 1000만건 정도 테이블이면 클러스터링 팩터도 낮을 가능성이 높다.
+
+## 성능 개선 대상 식별하기
+
+```sql
+## 프로세스 목록
+SHOW PROCESSLIST;
+
+## 슬로우 쿼리 확인
+SELECT query, exec_count, sys.format_time(avg_latency) AS "avg latency", rows_sent_avg, rows_examined_avg, last_seen
+FROM sys.x$statement_analysis
+ORDER BY avg_latency DESC;
+
+## 성능 개선 대상 식별
+SELECT DIGEST_TEXT                                                      AS query,
+       IF(SUM_NO_GOOD_INDEX_USED > 0 OR SUM_NO_INDEX_USED > 0, '*', '') AS full_scan,
+       COUNT_STAR                                                       AS exec_count,
+       SUM_ERRORS                                                       AS err_count,
+       SUM_WARNINGS                                                     AS warn_count,
+       SEC_TO_TIME(SUM_TIMER_WAIT / 1000000000000)                      AS exec_time_total,
+       SEC_TO_TIME(MAX_TIMER_WAIT / 1000000000000)                      AS exec_time_max,
+       SEC_TO_TIME(AVG_TIMER_WAIT / 1000000000000)                      AS exec_time_avg_ms,
+       SUM_ROWS_SENT                                                    AS rows_sent,
+       ROUND(SUM_ROWS_SENT / COUNT_STAR)                                AS rows_sent_avg,
+       SUM_ROWS_EXAMINED                                                AS rows_scanned,
+       DIGEST                                                           AS digest
+FROM performance_schema.events_statements_summary_by_digest
+ORDER BY SUM_TIMER_WAIT DESC;
+
+##  I/O 요청이 많은 테이블 목록
+SELECT *
+FROM sys.io_global_by_file_by_bytes
+WHERE file LIKE '%ibd';
+
+## 테이블별 작업량 통계 
+SELECT table_schema,
+       table_name,
+       rows_fetched,
+       rows_inserted,
+       rows_updated,
+       rows_deleted,
+       io_read,
+       io_write
+FROM sys.schema_table_statistics
+WHERE table_schema NOT IN ('mysql', 'performance_schema', 'sys');
+
+
+## 총 메모리 사용량 확인
+SELECT *
+FROM sys.memory_global_total;
+
+## 스레드별 메모리 사용량 확인
+SELECT thread_id, user, current_allocated
+FROM sys.memory_by_thread_by_current_bytes
+LIMIT 10;
+
+## 최근 실행된 쿼리 이력 기능 활성화
+UPDATE performance_schema.setup_consumers
+SET ENABLED = 'yes'
+WHERE NAME = 'events_statements_history'
+
+UPDATE performance_schema.setup_consumers
+SET ENABLED = 'yes'
+WHERE NAME = 'events_statements_history_long';
+
+## 최근 실행된 쿼리 이력 확인
+SELECT *
+FROM performance_schema.events_statements_history;
+```
+
 # 참고
 
 - [인프라 공방 5기](https://edu.nextstep.camp/c/VI4PhjPA/) - 강의자료
