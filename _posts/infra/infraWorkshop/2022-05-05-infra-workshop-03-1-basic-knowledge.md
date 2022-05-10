@@ -130,6 +130,117 @@ $ curl -I edu.nextstep.camp
 - 서버는 GZIP 압축을 활성화하도록 구성해야 함
 - 일부 CDN의 경우 특별히 주의하여 GZIP이 활성화되었는지 확인해야 함
 
+<br>
+
+# 캐싱 활용하기
+
+## HTTP Cache
+
+- 참고 : [HTTP Cache로 불필요한 네트워크 요청 방지](https://web.dev/http-cache/)
+
+<br>
+
+# MySQL 최적화 대상
+
+대부분의 웹 애플리케이션의 주 작업은 DB 데이터 조회와 저장이다. 통상 서버 처리시간의 70% 이상은 SQL을 처리하는데 사용되곤 한다.
+
+따라서 안정적인 서비스를 운영하기 위해 DB를 최족화할 필요가 있다.
+
+## 조인문
+
+```sql
+SELECT * FROM Products 
+JOIN OrderDetails ON Products.ProductID = OrderDetails.ProductID 
+WHERE Products.ProductID IN (1,30)
+```
+
+![img](https://techcourse-storage.s3.ap-northeast-2.amazonaws.com/06cb1909d5964b1796aa111c1c70941a)
+_출처 : [인프라 공방 5기](https://edu.nextstep.camp/c/VI4PhjPA/) - 강의자료_
+{: .text-center}
+
+- ProductID 1과 30을 검색하기 위해 Product 테이블을 먼저 찾는다.
+- 테이블에 동시 접근이 불가능하여 위 그림 처럼 먼저 접근하는 테이블을 **드라이빙 테이블**, 뒤늦게 검색되는 테이블을 **드리븐 테이블**이라고 한다.
+- 가능하면 적은 결과가 반환될 것 같은 테이블을 드라이빙 테이블로 선정하면 좋다. 드라이빙 테이블의 추출 건수는 곧 드리븐 테이블의 엑세스 반복 횟수이기 때문이다.
+
+## DB 최적화 대상
+
+
+<img width="574" alt="image" src="https://user-images.githubusercontent.com/53864640/167648418-6b0c1c40-5309-431f-8f17-c56bd4095674.png">{: .align-center}
+
+### Client
+
+- 호출 횟수를 줄인다.
+  - 복수 건의 레코드를 한번의 호출로 집합 처리
+  - 두 개 이상의 쿼리를 한 쿼리로 통합 처리
+- JDBC Statement는 쿼리 문장 분석, 컴파일, 실행의 단계를 캐싱한다. PreparedStatement는 처음 한 번만 세 단계를 거친 후 캐시에 담아서 재사용한다.
+- DB Connection Pool을 사용하여 객체를 생성하는 부분에서 발생하는 대기시간을 줄이고 네트워크 부담을 줄일 수 있다. 
+- Fetchsize 조정하거나 Paging을 활용한다.
+
+### Database Engine
+
+- 파일시스템에 저장된 데이터가 조회되면 해당 데이터를 메모리에 저장해 이후 동일 데이터 조회 시 파일시스템의 물리적인 입출력이 발생하지 않도록 한다.
+- 서버 파라미터를 튜닝한다.
+
+### Filesystem
+
+- SSD 사용
+- SQL을 최적화하여 필요 이상의 데이터 블록을 읽는 것을 방지(즉, SQL 튜닝이란 읽는 블록 수를 줄여주는 것을 의미)
+
+Spring Data Access, Mysql5.7 이상, Public Cloud 를 활용한다면 상당 부분 최적화되어 있을 것이다.<br>
+우리는 SQL 최적화와 몇가지 DB 서버 튜닝에 집중하면 된다.(참고 > [쿼리 최적화 첫걸음 - 7가지 체크리스트](https://medium.com/watcha/%EC%BF%BC%EB%A6%AC-%EC%B5%9C%EC%A0%81%ED%99%94-%EC%B2%AB%EA%B1%B8%EC%9D%8C-%EB%B3%B4%EB%8B%A4-%EB%B9%A0%EB%A5%B8-%EC%BF%BC%EB%A6%AC%EB%A5%BC-%EC%9C%84%ED%95%9C-7%EA%B0%80%EC%A7%80-%EC%B2%B4%ED%81%AC-%EB%A6%AC%EC%8A%A4%ED%8A%B8-bafec9d2c073))
+
+## SQL 최적화 대상
+
+실행계획을 확인할 경우 어떻게 수행되는지 알아본다.<br>
+(참고 > [MySQL 내부 구조](https://brunch.co.kr/@jehovah/21))
+
+### 쿼리 동작 방식
+
+![img](https://nextstep-storage.s3.ap-northeast-2.amazonaws.com/09610baf606b4854b273a8ffc452b009)
+_출처 : [인프라 공방 5기](https://edu.nextstep.camp/c/VI4PhjPA/) - 강의자료_
+{: .text-center}
+
+- **Query Caching** : (Key, Value) = (SQL문, 쿼리의 실행결과) 인 Map
+  - [캐시 확인 절차]
+    - 요청 쿼리가 **Query cache**에 존재하는가?
+    - 해당 사용자가 그 결과를 볼 수 있는 **권한**이 있는가?
+    - **트랜잭션 내**에서 실행된 쿼리인 경우 **가시 범위 내**에 있는 결과인가?
+    - 호출 시점에 따라 **결과가 달라지는 요소**(RAND, CURRENT_DATE 등)가 있는가?
+    - 캐시가 만들어지고 난 이후 해당 데이터가 **다른 사용자에 의해 변경**되지 않았는가?
+    - 쿼리 결과가 **캐시하기에 너무 크지 않은가**?
+    - 다만, 데이터가 변경되면 모두 삭제해야 하는데 이는 **동시 처리 성능 저하를 유발**하고 **많은 버그의 원인**이 되어 MySQL 8.0으로 올라오면서 제거되었음.
+- **Parsing** : 사용자로부터 요청된 SQL을 잘게 쪼개서 서버가 이해할 수 있는 수준으로 분리
+- **Preprocessor** : 해당 쿼리가 문법적으로 틀리지 않은지 확인하여 부정확하다면 여기서 처리를 중단 (일괄처리(batch) 내에 있다면 일괄처리 전체를 중단)
+- **Optimization** : 실행계획(Exception Plan)
+  - 쿼리 분석: Where 절의 검색 조건인지 Join 조건인지 판단
+  - 인덱스 선택: 각 테이블에 사용된 조건과 인덱스 통계 정보를 이용해 사용할 인덱스를 결정
+  - 조인 처리: 여러 테이블의 조인이 있는 경우 어떤 순서로 테이블을 읽을지 결정
+- **Handler** (Storage Engine)
+  - MySQL 실행엔진의 요청에 따라 데이터를 디스크로 저장하고 디스크로부터 읽어오는 역할을 담당
+  - MySQL 엔진에서는 Storage Engine 으로부터 받은 레코드를 조인하거나 정렬하는 작업을 수행
+
+### Index Range Scan / Table Full Scan
+
+- **Sequential access**
+  - 물리적으로 인접한 페이지를 차례대로 읽는 순차 접근 방식
+  - 인접한 페이지를 여러 개 읽는 다중 페이지 읽기 방식으로 수행
+- **Random access**
+  - 물리적으로 떨어진 페이지들에 임의로 접근하는 임의 접근 방식
+  - 정해진 순서없이 이동하는 만큼 디스크의 물리적인 움직임이 필요하고 다중 페이지 읽기가 불가능해 데이터의 접근 수행 시간이 오래 걸림
+  
+- DB 테이블에서 데이터 찾는 방법
+  1) 테이블 전체 스캔(Table Full Scan)
+  2) 인덱스 이용
+  
+**Table Full Scan**은 **Sequential access**와 Multi block I/O 방식으로 디스크를 읽어 한 블록에 속한 모든 레코드를 한번에 읽어들이는데 반해,<br>
+**Index Range Scan**은 **Random access**와 Single Block I/O로 레코드 하나를 읽기 위해 매번 I/O가 발생한다.<br>
+따라서 읽을 데이터가 일정량을 넘으면 인덱스보다 Table Full Scan이 유리하다. 즉, **인덱스**는 **큰 테이블에서 소량 데이터를 검색**할 때 사용합니다.
+
+**OLTP 시스템에서는 소량 데이터를 주로 검색**하므로 인덱스를 효과적으로 활용하는 것이 중요하다. (기본적으로 사용하는 NL(Nested Loops) Join도 인덱스를 이용한 조인이다.)<br> 
+**대량 데이터를 빠르게 처리**하려면, 인덱스와 NL 조인보다 **Table Full Scan과 해시 조인이 유리**합니다. Table Full scan 비용은 파티션 활용 전략과 병렬처리로 줄일 수 있습니다.
+
+결론, Index 사용 시 Random I/O 횟수 줄이는 것이 목표!
+
 # 참고
 
 - [인프라 공방 5기](https://edu.nextstep.camp/c/VI4PhjPA/) - 강의자료
