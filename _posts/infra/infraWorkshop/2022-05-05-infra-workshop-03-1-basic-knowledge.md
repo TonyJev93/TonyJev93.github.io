@@ -349,6 +349,71 @@ SELECT *
 FROM performance_schema.events_statements_history;
 ```
 
+## DB 서버 튜닝
+
+### 메모리 튜닝
+
+- Thread
+  - MySQL은 커넥션마다 하나의 Thread를 생성하여 요청을 처리한다.
+  - Thread를 메모리에 할당하고 해제하는데 비용이 크기 때문에 이를 줄여야 한다.
+
+```sql
+## 현재 쓰레드(연결) 개수 확인
+SELECT * FROM performance_schema.threads;
+
+SHOW STATUS LIKE '%THREAD%';
+```
+
+thread_cache_size는 지나치게 높여둘 필요는 없으며 일반적으로 threads_connected의 피크 치보다 약간 낮은 수치 정도를 설정하는 것이 좋다. 
+
+이를 통해 쓰레드가 생성되고 소멸되면서 겪게 되는 메모리, 각종 자원, 시간 등의 낭비를 줄일 수 있습니다.
+
+- Caching
+  - 버퍼는 MySQL 내부적으로 하나만 확보되는 Global Buffer와 Thread(Connection)별로 확보되는 Thread Buffer가 있다.
+  - Thread Buffer에 많은 메모리를 할당하면 성능이 올라가지만, 설정값 * Connection 수만큼 확보하므로 Connection이 갑자기 늘어나면 메모리가 부족해져 swap이 발생할 수 있다.
+  - **innodb_buffer_pool_size**
+    - InnoDB의 데이터나 인덱스를 캐시하기 위한 메모리상의 영역
+    - 글로벌 버퍼이므로 크게 할당할 것을 권한다.
+    - 보통 시스템 전체 메모리의 80% 수준으로 설정한다.(최대 512MB)
+  - **key_buffer_size**
+    - 인덱스를 메모리에 저장하는 버퍼 크기를 의미
+    - 보통 총 메모리 크기의 25% 정도를 설정
+    - Key Buffer 사용률 = 1 - (Key_reads/Key_read_requests) * 100 (90% 이상일 경우 key_buffer_size 가 효율적으로 설정되어 있다고 판단)
+
+```sql
+SHOW STATUS LIKE '%key%';
+```
+
+### 커넥션 튜닝
+
+```shell
+mysql> SHOW VARIABLES LIKE '%max_connection%';
+mysql> SHOW STATUS LIKE '%CONNECT%';
+mysql> SHOW STATUS LIKE '%CLIENT%';
+```
+
+- connect_timeout
+  - MySQL이 클라이언트로부터 접속 요청을 받은 경우 몇 초까지 기다릴지 설정하는 변수
+  - 기본 값은 5초이며 일반적으로 수정할 필요는 없다.
+- Interactive_timeout
+  - 'mysql>'과 같은 콘솔이나 터미널 상에서의 클라이언트 접속을 의미
+  - 기본 값으로 8시간이 잡혀 있으나 1시간 정도로 낮추는 것이 좋다.
+- wait_timeout
+  - 접속 후 쿼리가 들어올 때 까지 기다리는 시간
+  - 접속이 많은 DBMS에서는 이 값을 낮추어 sleep 상태의 Connection 들을 정리하여 전체 성능을 향상시킬 수 있다.
+  - 하지만 값을 너무 낮추게 되면 잦은 지나치게 커넥션이 발생할 수 있어 보통 15~20 사이의 값을 설정한다.
+  - Aborted client는 2% 아래인 것이 바람직한 상태이다.
+- max_connections
+  - 서버가 허용하는 최대한의 커넥션 수
+  - 서버의 사양에 따라 달라질 수 있으며 일반적으로 120~250개 정도로 설정
+  - 하지만 접속이 많고 고용량 서버의 경우 1000개 정도의 높은 값을 설정하는 것도 가능하다.
+  - Too many connection 에러가 발생하지 않도록 적절한 값을 설정하는 것이 중요
+- back_log
+  - max_connection 설정값 이상의 접속이 발생할 때 얼마만큼의 커넥션을 큐에 보관할지에 대한 설정 값
+  - 기본 값은 50이며 접속이 많은 서버의 경우 이 값을 늘릴 필요가 있다.
+
+<br>
+
 # 참고
 
 - [인프라 공방 5기](https://edu.nextstep.camp/c/VI4PhjPA/) - 강의자료
