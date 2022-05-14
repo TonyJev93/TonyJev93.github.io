@@ -414,6 +414,255 @@ mysql> SHOW STATUS LIKE '%CLIENT%';
 
 <br>
 
+# 쿼리 튜닝하기
+
+- 실습용 DB 세팅
+
+```shell
+# ID : user, PW : password
+$ docker run -d -p 23306:3306 brainbackdoor/data-tuning:0.0.3
+```
+
+## 인덱스
+
+### 인덱스 컬럼을 가공하지 않는다.
+
+```sql
+EXPLAIN
+SELECT *
+FROM tuning.employee
+WHERE SUBSTRING(id, 1, 4) = 1100
+  AND LENGTH(id) = 5;
+```
+
+```sql
+EXPLAIN
+SELECT *
+FROM tuning.employee
+WHERE id BETWEEN 11000 AND 11009;
+```
+
+인덱스 컬럼을 가공하지 않아야, 리프블록에서 스캔 시작점을 찾아 거기서부터 스캔하다가 중간에 멈출 수 있다.
+  - <>, NOT IN, NOT BETWEEN과 같은 NOT-EQUAL로 비교된 경우
+  - LIKE '%??'
+  - SUBSTRING(column, 1, 1), DAYOFMONTH(coulmn)과 같이 인덱스 칼럼이 변형된 경우
+  - WHERE char_column = 10 과 같이 데이터 타입이 다른 비교
+
+<br>
+
+### 인덱스 순서를 고려한다.
+
+```sql
+EXPLAIN
+SELECT first_name, sex, COUNT(1) AS 카운트
+FROM tuning.employee
+GROUP BY first_name, sex;
+```
+
+```sql
+EXPLAIN
+SELECT first_name, sex, COUNT(1) AS 카운트
+FROM tuning.employee
+GROUP BY sex, first_name;
+```
+
+인덱스는 항상 정렬 상태를 유지하므로 인덱스 순서에 따라 ORDER BY, GROUP BY를 위한 소트 연산을 생략할 수 있다.
+
+조건절에 항상 사용하거나, 자주 사용하는 컬럼을 인덱스로 선정하자.
+
+'=' 조건으로 자주 조회하는 컬럼을 앞쪽에 두자.
+
+다음과 같이 인덱스가 잡혀있는 경우, 1, 2번은 3번에 의해 중복 이므로 제거하는 것이 좋다.
+
+```
+1) 과세코드
+2) 과세코드 + 이름
+3) 과세코드 + 이름 + 연령
+```
+
+<br>
+
+### 인덱스를 제대로 사용하는지 확인
+
+```sql
+EXPLAIN
+SELECT id
+FROM tuning.employee
+WHERE join_date LIKE '1998%'
+  AND id > 100000;
+```
+
+```sql
+SELECT (SELECT COUNT(1) FROM tuning.employee WHERE join_date LIKE '1989%') AS '입사일자 필터',
+       (SELECT COUNT(1) FROM tuning.employee WHERE id > 100000)            AS '사원번호 필터';
+```
+
+```sql
+EXPLAIN
+SELECT id
+FROM tuning.employee
+WHERE join_date >= '1989-01-01'
+  AND join_date < '1990-01-01'
+  AND id > 100000;
+```
+
+Covered Index
+: 인덱스 스캔과정에서 얻은 정보만으로 처리할 수 있어 테이블 액세스가 발생하지 않는 쿼리
+
+```sql
+EXPLAIN
+SELECT a.*
+FROM (
+       -- 서브쿼리에서 커버링 인덱스로만 데이터 조건과 select column을 지정하여 조인
+       SELECT id
+       FROM subway.member
+       WHERE age BETWEEN 30 AND 39
+     ) AS b
+       JOIN programmer a ON b.id = a.id;
+```
+
+<br>
+
+### 복합 인덱스시 범위 검색컬럼을 뒤에 둬야 한다.
+
+![image](https://user-images.githubusercontent.com/53864640/168426634-9981b20b-4414-470d-aff3-890d00cd8afa.png)
+_출처 : [인프라 공방 5기](https://edu.nextstep.camp/c/VI4PhjPA/) - 강의자료_
+{: .text-center}
+
+```sql
+CREATE INDEX `idx_employee_id_time` ON `tuning`.`record` (employee_id, time);
+DROP INDEX `idx_employee_id_time` ON `tuning`.`record`;
+
+CREATE INDEX `idx_time_employee_id` ON `tuning`.`record` (time, employee_id);
+DROP INDEX `idx_time_employee_id` ON `tuning`.`record`;
+```
+
+```sql
+EXPLAIN
+SELECT *
+FROM tuning.record
+WHERE employee_id = 110183
+  AND time BETWEEN '2020-01-01' AND '2020-08-30';
+```
+
+<br>
+
+### 인덱스 구성 확인하기
+
+```sql
+## 테이블 / 인덱스 크기 확인
+SELECT table_name,
+       table_rows,
+       round(data_length / (1024 * 1024), 2)  as 'DATA_SIZE(MB)',
+       round(index_length / (1024 * 1024), 2) as 'INDEX_SIZE(MB)'
+FROM information_schema.TABLES
+where table_schema = 'subway';
+
+## 미사용 인덱스 확인
+SELECT *
+FROM sys.schema_unused_indexes;
+
+## 중복 인덱스 확인
+SELECT *
+FROM sys.schema_redundant_indexes;
+```
+
+<br>
+
+## 조인문
+
+### 조인 연결 key 들은 양쪽 다 인덱스를 가지고 있는 것이 좋다.
+
+![image](https://user-images.githubusercontent.com/53864640/168426933-82fc7665-2c5b-4369-ac87-8f2d9c976d1f.png)
+_출처 : [인프라 공방 5기](https://edu.nextstep.camp/c/VI4PhjPA/) - 강의자료_
+{: .text-center}
+
+한쪽에만 인덱스가 있을 경우, Join Buffer를 사용하여 성능 개선을 하나 일반적인 중첩 루프 조인에 비해 효율이 떨어진다.
+
+또한 테이블 크기와 상관없이 인덱스가 있는 테이블이 드라이빙 테이블이 되므로 주의해야 한다.
+
+<br>
+
+### 데이터가 적은 테이블을 랜덤액세스해야 한다.
+
+```sql
+EXPLAIN
+SELECT mapping.employee_id,
+       department.id
+FROM tuning.employee_department mapping,
+     department
+WHERE mapping.department_id = department.id;
+```
+
+```sql
+EXPLAIN
+SELECT STRAIGHT_JOIN mapping.employee_id,
+                     department.id
+FROM tuning.employee_department mapping,
+     department
+WHERE mapping.department_id = department.id;
+```
+
+드라이빙 테이블의 데이터가 적을 경우, 중첩 루프 조인을 수행하며 드리븐 테이블의 많은 양의 데이터에 인덱스 스캔을 한다.
+
+드리븐 테이블의 Primary Key를 사용하지 않을 경우 많은 양의 데이터에 랜덤 액세스로 테이블에 접근하므로 비효율적일 수 있다.
+
+<br>
+
+### 모수 테이블 크기 줄이기
+
+```sql
+EXPLAIN
+SELECT employee.id, employee.last_name, employee.first_name, employee.join_date
+FROM tuning.employee,
+     tuning.salary
+WHERE employee.id = salary.id
+  AND employee.id BETWEEN 10001 AND 50000
+GROUP BY employee.id
+ORDER BY SUM(salary.annual_income) DESC
+LIMIT 150,10;
+```
+
+```sql
+EXPLAIN
+SELECT employee.id, employee.last_name, employee.first_name, employee.join_date
+FROM (
+       SELECT id
+       FROM tuning.salary
+       WHERE id BETWEEN 10001 AND 50000
+       GROUP BY id
+       ORDER BY SUM(salary.annual_income) DESC
+       LIMIT 150,10
+     ) salary,
+     employee
+WHERE employee.id = salary.id;
+```
+
+<br>
+
+### 서브쿼리보단 조인문 활용하기
+
+대부분 서브쿼리보다 조인문이 성능이 좋다.(관련 자료 - [Join vs. sub-query](https://stackoverflow.com/questions/2577174/join-vs-sub-query), [Rewriting Subqueries as Joins](https://dev.mysql.com/doc/refman/5.7/en/rewriting-subqueries.html))
+
+MySQL 5.6 이후로 서브쿼리 최적화가 이루어진다. (SEMI JOIN, MATERIALIZED 등) 
+
+![image](https://user-images.githubusercontent.com/53864640/168427636-68aad813-045e-4b47-855b-d1c473085b77.png)
+_출처 : [인프라 공방 5기](https://edu.nextstep.camp/c/VI4PhjPA/) - 강의자료_
+{: .text-center}
+
+다만, 8.0까지도 UPDATE, DELETE 등는 서브쿼리 최적화가 지원되지 않으므로, 가능하면 JOIN 을 사용하자.
+
+```sql
+EXPLAIN EXTENDED
+SELECT *
+FROM tuning.employee
+WHERE id IN (SELECT id FROM salary);
+SHOW WARNINGS;
+```
+
+
+<br>
+
 # 참고
 
 - [인프라 공방 5기](https://edu.nextstep.camp/c/VI4PhjPA/) - 강의자료
