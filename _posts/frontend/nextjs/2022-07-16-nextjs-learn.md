@@ -559,6 +559,224 @@ function Profile() {
 
 ## Page Path Depends on External Data
 
+### `getStaticPaths`
+
+- `pages/posts`디렉토리 하위에 `[id].js` 파일 생성
+- development 모드에서는 요청 시 호출 되지만 production 모드에서는 build time 에 수행 됨
+
+```javascript
+// [id].js
+import Layout from '../../components/layout';
+
+export default function Post() {
+  return <Layout>...</Layout>;
+}
+```
+
+```javascript
+// /lib/posts.js
+export function getAllPostIds() {
+  const fileNames = fs.readdirSync(postsDirectory);
+
+  // Returns an array that looks like this:
+  // [
+  //   {
+  //     params: {
+  //       id: 'ssg-ssr'
+  //     }
+  //   },
+  //   {
+  //     params: {
+  //       id: 'pre-rendering'
+  //     }
+  //   }
+  // ]
+  return fileNames.map((fileName) => {
+    return {
+      params: {
+        id: fileName.replace(/\.md$/, ''),
+      },
+    };
+  });
+}
+```
+
+- (주의) 응답값으로 `params`를 포함하고 있어야 하며, `[id]`에 해당하는 `id`를 Key로 가지고 있어야 한다.
+
+```javascript
+// [id].js
+...
+import { getAllPostIds } from '../../lib/posts';
+
+export async function getStaticPaths() {
+  const paths = getAllPostIds();
+  return {
+    paths,
+    fallback: false,
+  };
+}
+
+export default function Post() {
+  ...
+}
+```
+
+- `[id].js`에 `getStaticPaths`를 추가하고 `getAllPostIds()`를 통해 paths값들을 불러온다.
+- **fallback**
+  - false : 요청 페이지 없을 시 404 page 반환(404 page 위치 = `pages/404.js`, build time 에 생성 됨. [Error Page](https://nextjs.org/docs/advanced-features/custom-error-page))
+  - true : 해당 Path 에 첫 요청 때 받은 페이지를 fallback 해준다.
+  - blocking : 요청 path에 정적인 페이지가 없는 경우 getStaticProps를 통해 Server-side rendering 을 하고 캐싱한다. 
+- (번외) Catch-all Routes
+  - `[...]` : 모든 Path에 대한 요청을 확장 할 때 사용.
+  - Ex) `pages/posts/[...id].js` => `/posts/a, /posts/a/b, /posts/a/b/c` ...
+    - `/posts/a/b/c` 같은 경우 `getStaticPaths`와 `getStaticProps`를 아래와 같이 구현해야 한다.
+  
+```javascript
+...
+return [
+  {
+    params: {
+      // Statically Generates /posts/a/b/c
+      id: ['a', 'b', 'c'],
+    },
+  },
+  //...
+];
+```
+
+```javascript
+export async function getStaticProps({ params }) {
+  // params.id will be like ['a', 'b', 'c']
+}
+```
+
+
+
+
+### `getStaticProps`
+
+- 추출한 `id`로 부터 데이터를 불러오기 위해 `/lib/posts.js`파일 내에 아래와 같은 함수를 구현한다.
+
+```javascript
+// /lib/posts.js
+export function getPostData(id) {
+  const fullPath = path.join(postsDirectory, `${id}.md`);
+  const fileContents = fs.readFileSync(fullPath, 'utf8');
+
+  // Use gray-matter to parse the post metadata section
+  const matterResult = matter(fileContents);
+
+  // Combine the data with the id
+  return {
+    id,
+    ...matterResult.data,
+  };
+}
+```
+
+```javascript
+// [id].js
+...
+import { getAllPostIds, getPostData } from "../../lib/posts";
+
+export async function getStaticProps({ params }) {
+  const postData = getPostData(params.id);
+  return {
+    props: {
+      postData,
+    },
+  };
+}
+
+...
+
+export default function Post({ postData }) {
+  return (
+    <Layout>
+      {postData.title}
+      <br />
+      {postData.id}
+      <br />
+      {postData.date}
+    </Layout>
+  );
+}
+```
+
+## Render Markdown
+
+- markdown 내용을 랜더링 하기 위해 `remark` 라이브러리를 사용한다.
+
+```bash
+$ npm install remark remark-html
+```
+
+```javascript
+// /lib/posts.js
+import { remark } from 'remark';
+import html from 'remark-html';
+
+...
+
+// 기존 함수 내용에 remark 사용 추가
+export async function getPostData(id) {
+  const fullPath = path.join(postsDirectory, `${id}.md`);
+  const fileContents = fs.readFileSync(fullPath, 'utf8');
+
+  // Use gray-matter to parse the post metadata section
+  const matterResult = matter(fileContents);
+
+  // Use remark to convert markdown into HTML string
+  const processedContent = await remark()
+    .use(html)
+    .process(matterResult.content);
+  const contentHtml = processedContent.toString();
+
+  // Combine the data with the id and contentHtml
+  return {
+    id,
+    contentHtml,
+    ...matterResult.data,
+  };
+}
+```
+
+- `remark`는 await을 사용하기 때문에 `getPostData`함수에 async를 추가하는 것은 중요하다.
+- 즉, 해당 함수를 호출하여 사용하는 `pages/posts/[id].js`의 `getStaticProps` 내에도 await 을 추가해주어야 한다.
+- 그리고 <Post> 컴포넌트에 markdown content를 담기위해 아래와 같이 소스를 수정한다.
+
+```javascript
+// [id].js
+...
+
+export default function Post({ postData }) {
+  return (
+    <Layout>
+      {postData.title}
+      <br />
+      {postData.id}
+      <br />
+      {postData.date}
+      <div dangerouslySetInnerHTML={{ __html: postData.contentHtml }} />
+    </Layout>
+  );
+}
+```
+
+<br>
+
+## Polishing the Post Page
+
+- Post Page 를 좀 더 다듬기 위해 다음 과정을 수행한다. - [[참고]](https://nextjs.org/learn/basics/dynamic-routes/polishing-post-page)
+- `date` [format](https://date-fns.org/v2.16.1/docs/format)을 위해 `date-fns`라이브러리 사용
+
+```bash
+$ npm install date-fns
+```
+
+## Polishing the Index Page
+
+- Index Page 를 좀 더 다듬기 위해 다음 과정을 수행한다. - [[참고]](https://nextjs.org/learn/basics/dynamic-routes/polishing-index-page)
 
 
 <br>
