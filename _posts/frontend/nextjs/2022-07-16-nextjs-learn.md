@@ -6,7 +6,7 @@ categories:
     - Next.js
 tags:
     - Front End
-    - Nuxt.js
+    - Next.js
 toc: true
 toc_sticky: true
 toc_label: "목차"
