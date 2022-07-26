@@ -99,8 +99,14 @@ $ yarn install
 
 <br>
 
-# Mockito
+# Test
 
 ### 참고
 
 - [Mockito @Mock @MockBean @Spy @SpyBean 차이점](https://cobbybb.tistory.com/16#recentEntries)
+
+# Spring Security
+
+### 참고
+
+- [[스프링] Spring Security 인증은 어떻게 이루어질까? - 소스레벨 분석](https://cjw-awdsd.tistory.com/45)
