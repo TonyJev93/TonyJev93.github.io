@@ -24,7 +24,7 @@ Spring : Spring과 관련된 다양한 지식들을 정리한다.
 <br>
 
 # Data Source
-- 
+
 - [[Spring Boot] JavaConfig로 Datasource 설정하기](https://blog.jiniworld.me/69)
 
 <br>
