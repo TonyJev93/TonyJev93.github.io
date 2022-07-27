@@ -17,10 +17,6 @@ Spring : Spring과 관련된 다양한 지식들을 정리한다.
 
 # Spring Security
 
-## 원리 파악하기
-
-### 참고
-
 - [[Spring] Spring Security - 원리](/back%20end/spring/spring%20security/spring-security-principle/)
 - [[Spring] Spring Security - CORS 해결하기](/back%20end/spring/spring%20security/spring-security-principle/)
 
@@ -28,14 +24,11 @@ Spring : Spring과 관련된 다양한 지식들을 정리한다.
 <br>
 
 # Data Source
-
-### 참고
+- 
 - [[Spring Boot] JavaConfig로 Datasource 설정하기](https://blog.jiniworld.me/69)
 
 <br>
 
 # Test
-
-### 참고
 
 - [Mockito @Mock @MockBean @Spy @SpyBean 차이점](https://cobbybb.tistory.com/16#recentEntries)
