@@ -17,78 +17,13 @@ Spring : Spring과 관련된 다양한 지식들을 정리한다.
 
 # Spring Security
 
-## CORS 해결하기
-
-### 1) WebMvcConfigurer addCorsMappings
-
-- WebMvcConfigurer addCorsMappings 구현 (in Spring)
-```java
-@RequiredArgsConstructor
-@Configuration
-public class WebMvcConfig implements WebMvcConfigurer {
-
-    private final LoginUserIdArgumentResolver loginUserIdArgumentResolver;
-
-    @Override
-    public void addCorsMappings(CorsRegistry registry) {
-        registry.addMapping("/**")
-            .allowedOrigins("http://localhost:3000")
-            .allowedMethods("OPTIONS", "GET", "POST", "PUT", "DELETE");
-    }
-}
-```
-
-- Preflight Request 허용 (in Spring)
-```java
-@RequiredArgsConstructor
-@EnableWebSecurity
-public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
-
-    @Override
-    protected void configure(HttpSecurity http) throws Exception {
-        http
-            .authorizeRequests()
-            .mvcMatchers(HttpMethod.OPTIONS, "/**").permitAll() // Preflight Request 허용해주기
-            .antMatchers("/api/v1/**").hasAnyAuthority(USER.name());
-    }
-}
-```
-
-### 2) React Proxy를 사용해서 SOP 해결하기
-
-- http-proxy-middleware 모듈 설치
-```bash
-$ yarn add http-proxy-middleware
-```
-
-- setProxy.js 설정
-  - `http://localhost:3000/api/v1 -> (proxy) -> http://localhost:8080/api/v1`
-
-```javascript
-// /src/setProxy.js
-const { createProxyMiddleware } = require('http-proxy-middleware');
-
-module.exports = function (app) {
-  app.use(
-    createProxyMiddleware('/api/v1', {
-      target: 'http://localhost:8080', // Server 의 도메인과 일치하는 URL
-      changeOrigin: true,
-    })
-  );
-};
-```
-
-- Proxy가 적용되지 않는 경우
-  - yarn.lock node_modules 캐시문제일 수 있으므로 제거
-
-```bash
-$ rm -rf yarn.lock node_modules
-$ yarn install
-```
+## 원리 파악하기
 
 ### 참고
 
-- [[Spring] Spring Security, React를 사용하면서 CORS 허용하는 방법](https://devlog-wjdrbs96.tistory.com/429)
+- [[Spring] Spring Security - 원리](/back%20end/spring/spring%20security/spring-security-principle/)
+- [[Spring] Spring Security - CORS 해결하기](/back%20end/spring/spring%20security/spring-security-principle/)
+
 
 <br>
 
@@ -104,9 +39,3 @@ $ yarn install
 ### 참고
 
 - [Mockito @Mock @MockBean @Spy @SpyBean 차이점](https://cobbybb.tistory.com/16#recentEntries)
-
-# Spring Security
-
-### 참고
-
-- [[스프링] Spring Security 인증은 어떻게 이루어질까? - 소스레벨 분석](https://cjw-awdsd.tistory.com/45)
