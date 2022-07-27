@@ -18,7 +18,7 @@ Spring : Spring과 관련된 다양한 지식들을 정리한다.
 # Spring Security
 
 - [[Spring] Spring Security - 원리](/back%20end/spring/spring%20security/spring-security-principle/)
-- [[Spring] Spring Security - CORS 해결하기](/back%20end/spring/spring%20security/spring-security-principle/)
+- [[Spring] Spring Security - CORS 해결하기](/back%20end/spring/spring%20security/spring-security-cors-resolution/)
 
 
 <br>
