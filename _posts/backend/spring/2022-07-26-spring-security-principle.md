@@ -17,37 +17,141 @@ toc_label: "목차"
 Spring : Spring Security 원리를 이해한 대로 정리해보자.
 {: .notice--info}
 
-# Spring Security
+# FilterChainProxy
 
-- Filter 리스트 조회 in FilterChainProxy.getFilters()
+- `getFilters()` : Filter 리스트 조회
 
-- Security 의 Default 인증 필터 = Session/Cookie 방식 in UsernamePasswordAuthenticationFilter
+<br>
 
-- UsernamePasswordAuthenticationFilter = AbstractAuthenticationProcessingFilter 를 상속
+# AbstractAuthenticationProcessingFilter
 
-- AbstractAuthenticationProcessingFilter
-  - doFilter() : 필터의 로직이 들어있음. UsernamePasswordAuthenticationFilter의 attemptAuthentication()를 호출
-  - attemptAuthentication() 추상메소드
+- `doFilter()` : 필터의 로직을 수행한다.
+- `attemptAuthentication()`
+  - `doFilter()` 내에서 수행 되며 추상 메소드로 되어있다. 
+  - UsernamePasswordAuthenticationFilter에 구현되어 있어 이를 호출한다.
 
-- attemptAuthentication() in UsernamePasswordAuthenticationFilter
-  - UsernamePasswordAuthenticationToken: AbstractAuthenticationToken을 상속
-    - AbstractAuthenticationToken: Authentication을 상속 = SecurityContextHolder.getContext() 에 등록될 객체
-    - UsernamePasswordAuthenticationToken 생성자 2개 존재
-        1. setAuthenticated(false); // <- attemptAuthentication()에서는 해당 생성자 사용
-            - 처음에는 미인증된 Authentication 생성하고 추후 인증완료 되면 인증된 Authentication 생성
-        2. setAuthenticated(true);
-  - getAuthenticationManager(): 상속한 AbstractAuthenticationProcessingFilter의 AuthenticationManager를 가져오는 함수
-    - AuthenticationManager 란: AuthenticationProvider라는 클래스 객체를 관리
-      - AuthenticationProvider: 실제 인증 로직이 담겨있는 객체
-      - Authentication authenticate(Authentication authentication): 인증로직을 통한 결과를 Authentication으로 반환
-      - AuthenticationManager의 구현체 (in UsernamePasswordAuthenticationFilter) = ProviderManager
+<br>
 
-- ProviderManager(AuthenticationManager)
-  - authenticate(): AuthenticationProvider을 for문을 통해 인증수행
-  - AuthenticationProvider
-    - Authentication authenticate(Authentication authentication): 실제 인증로직 수행
-    - boolean supports(Class<?> authentication): 인자로 전달받은 authentication가 Provider에서 사용되는 적합한 객체인지 검증
-    - AuthenticationProvider 구현체 = AbstractUserDetailsAuthenticationProvider in ProviderManager
+# UsernamePasswordAuthenticationFilter
+
+- Security 의 Default 인증 필터
+- Session/Cookie 방식
+- AbstractAuthenticationProcessingFilter를 상속하고 있다.
+
+```java
+@Override
+public class UsernamePasswordAuthenticationFilter extends AbstractAuthenticationProcessingFilter {
+    // ...
+    
+    public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response)
+            throws AuthenticationException {
+        if (this.postOnly && !request.getMethod().equals("POST")) {
+            throw new AuthenticationServiceException("Authentication method not supported: " + request.getMethod());
+        }
+        String username = obtainUsername(request);
+        username = (username != null) ? username.trim() : "";
+        String password = obtainPassword(request);
+        password = (password != null) ? password : "";
+        UsernamePasswordAuthenticationToken authRequest = UsernamePasswordAuthenticationToken.unauthenticated(username,
+                password);
+        // Allow subclasses to set the "details" property
+        setDetails(request, authRequest);
+        return this.getAuthenticationManager().authenticate(authRequest);
+    }
+}
+```
+
+## UsernamePasswordAuthenticationToken
+- Authentication을 상속하고 있는 `AbstractAuthenticationToken`클래스를 상속하고 있다.
+- 즉, 최종적으로 SecurityContextHolder.getContext()에 등록될 Authentication를 상속한 객체이다.
+- 2개의 생성자가 존재한다.
+
+```java
+public class UsernamePasswordAuthenticationToken extends AbstractAuthenticationToken {
+    // 1. 미인증 Authentication 객체 생성자
+    public UsernamePasswordAuthenticationToken(Object principal, Object credentials) {
+        super(null);
+        this.principal = principal;
+        this.credentials = credentials;
+        setAuthenticated(false);
+    }
+
+    // 2. 인증 Authentication 객체 생성자
+    public UsernamePasswordAuthenticationToken(Object principal, Object credentials,
+                                               Collection<? extends GrantedAuthority> authorities) {
+        super(authorities);
+        this.principal = principal;
+        this.credentials = credentials;
+        super.setAuthenticated(true); // must use super, as we override
+    }
+}
+```
+
+- UsernamePasswordAuthenticationFilter의 `attemptAuthentication()` 에서는 `1. 미인증 Authentication 객체 생성자`를 먼저 수행하여 DTO 로서 사용한다.
+- 추후 인증이 완료 되면 `2. 인증 Authentication 객체 생성자`를 통해 인증된 Authentication을 반환한다.
+
+## getAuthenticationManager()
+
+- `AuthenticationManager`(AbstractAuthenticationProcessingFilter에 존재)를 가져오는 함수이다.
+ 
+### AuthenticationManager
+- `AuthenticationProvider` 객체를 관리하는 역할을 수행하는 **인터페이스**이다.
+- `UsernamePasswordAuthenticationFilter`에서의 `AuthenticationManager` 구현체는 `ProviderManager`이다.
+
+```java
+public interface AuthenticationManager {
+    Authentication authenticate(Authentication authentication) throws AuthenticationException;
+}
+```
+
+```java
+public class ProviderManager implements AuthenticationManager, MessageSourceAware, InitializingBean {
+    //...
+    @Override
+    public Authentication authenticate(Authentication authentication) throws AuthenticationException {
+        Class<? extends Authentication> toTest = authentication.getClass();
+        // ...
+        for (AuthenticationProvider provider : getProviders()) {
+            if (!provider.supports(toTest)) {
+                continue;
+            }
+            // ...
+            try {
+                result = provider.authenticate(authentication);
+
+                // ...
+            } catch (AccountStatusException | InternalAuthenticationServiceException ex) {
+                // ...
+            }
+            // ...
+        }
+        //...
+    }
+}
+```
+
+- for 문을 통해 각각의 AuthenticationProvider 의 인증절차를 수행한다.
+- `provider.supports(toTest)` : 인자로 넘긴 `toTest(= Authentication 확장)가 Provider에 사용되는 Authentication 타입인지 확인
+- `provider.authenticate(authentication)` : 인증 수행 및 결과반환
+
+
+### AuthenticationProvider
+
+- 실제 인증 로직이 담겨있는 객체(= 최종적으로 실질적인 인증을 수행하는 역할)
+
+```java
+public interface AuthenticationProvider {
+
+    // 인증 수행 및 결과(Authentication) 반환
+    Authentication authenticate(Authentication authentication) throws AuthenticationException;
+
+    // 인자로 받은 authentication 가 Provider에 사용되는 Authentication 클래스 타입인지 확인
+    boolean supports(Class<?> authentication);
+}
+```
+
+- boolean supports(Class<?> authentication): 인자로 전달받은 authentication가 Provider에서 사용되는 적합한 객체인지 검증
+  - AuthenticationProvider 구현체 = AbstractUserDetailsAuthenticationProvider in ProviderManager
 
 - AbstractUserDetailsAuthenticationProvider
   - retrieveUser()
