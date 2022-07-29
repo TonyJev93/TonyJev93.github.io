@@ -150,20 +150,50 @@ public interface AuthenticationProvider {
 }
 ```
 
-- boolean supports(Class<?> authentication): 인자로 전달받은 authentication가 Provider에서 사용되는 적합한 객체인지 검증
-  - AuthenticationProvider 구현체 = AbstractUserDetailsAuthenticationProvider in ProviderManager
+- `boolean supports(Class<?> authentication)`: 인자로 전달받은 authentication이 Provider에서 사용되는 적합한 객체인지 검증
 
-- AbstractUserDetailsAuthenticationProvider
-  - retrieveUser()
-    - 추상 메소드(DaoAuthenticationProvider 에서 구현)
-      - DaoAuthenticationProvider
-        - retrieveUser(): UserDetailsService 객체를 통해 UserDetails 가져옴
-        - additionalAuthenticationChecks() : 입력받은 id, password 와 실제 id, password 비교 
-    - UserDetails 객체를 리턴
-  - createSuccessAuthentication(): 인증완료 후 수행
-    - UsernamePasswordAuthenticationToken 생성자 중 인증된 토큰을 반환하는 생성자 호출
-    - 인증 완료 후 AbstractAuthenticationProcessingFilter의 doFilter()로 반환
-    - AbstractAuthenticationProcessingFilter의 successfulAuthentication 수행
+### AbstractUserDetailsAuthenticationProvider
+
+- `ProviderManager`에서 `AuthenticationProvider`의 구현체이다. 
+
+```java
+public abstract class AbstractUserDetailsAuthenticationProvider {
+    @Override
+    public Authentication authenticate(Authentication authentication) throws AuthenticationException {
+        // ..
+        if (user == null) {
+            cacheWasUsed = false;
+            try {
+                user = retrieveUser(username, (UsernamePasswordAuthenticationToken) authentication);
+            } catch (UsernameNotFoundException ex) {
+                // ..
+            }
+            // ..
+        }
+        try {
+            // ..
+            additionalAuthenticationChecks(user, (UsernamePasswordAuthenticationToken) authentication);
+        }
+        catch (AuthenticationException ex) {
+            // ..
+        }
+        // ..
+        return createSuccessAuthentication(principalToReturn, authentication, user);
+    }
+}
+```
+
+- `retrieveUser()`
+  - UserDetailsService 객체를 통해 UserDetails 객체를 리턴해주는 추상 메소드이다.
+  - DaoAuthenticationProvider에서 구현하여 사용한다.
+- `additionalAuthenticationChecks(UserDetails userDetails, UsernamePasswordAuthenticationToken authentication)` 
+  - 입력받은 id, password 와 실제 id, password 비교
+- `createSuccessAuthentication()` : 인증완료 후 수행
+  - UsernamePasswordAuthenticationToken 생성자 중 **인증된 토큰을 반환**하는 생성자 호출
+  - 인증 완료 후 `AbstractAuthenticationProcessingFilter`의 doFilter()로 반환
+  - 이후 AbstractAuthenticationProcessingFilter의 successfulAuthentication 수행
+
+### AbstractAuthenticationProcessingFilter
 
 - successfulAuthentication() 
   - Authentication 객체를 Security Context에 저장
