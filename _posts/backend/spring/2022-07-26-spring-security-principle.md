@@ -9,9 +9,7 @@ tags:
     - Back End
     - Spring
     - Spring Security
-toc: true
-toc_sticky: true
-toc_label: "목차"
+toc: false
 ---
 
 Spring : Spring Security 원리를 이해한 대로 정리해보자.
