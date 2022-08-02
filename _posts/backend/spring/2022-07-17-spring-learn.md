@@ -32,6 +32,8 @@ Spring : Spring과 관련된 다양한 지식들을 정리한다.
 # Test
 
 - [Mockito @Mock @MockBean @Spy @SpyBean 차이점](https://cobbybb.tistory.com/16#recentEntries)
+- [테스트하기 좋은 코드 - 테스트하기 어려운 코드](https://jojoldu.tistory.com/674)
+- [@SpyBean @MockBean 의도적으로 사용하지 않기](https://jojoldu.tistory.com/320)
 
 <br>
 
