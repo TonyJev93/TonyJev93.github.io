@@ -54,7 +54,7 @@ _[[그림 출처] - 권용근개발자님 발표영상 화면 캡쳐](https://yo
 
 # 어떻게 테스트할 것인가
 
-![image](https://user-images.githubusercontent.com/53864640/182278326-5946a584-fbe5-4e3d-9dbc-15fab81c4449.png)
+![image](https://user-images.githubusercontent.com/53864640/182278326-5946a584-fbe5-4e3d-9dbc-15fab81c4449.png)<br>
 _[[그림 출처] - 권용근개발자님 발표영상 화면 캡쳐](https://youtu.be/YdtknE_yPk4)_
 {: .text-center}
 
