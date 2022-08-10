@@ -41,3 +41,10 @@ Spring : Spring과 관련된 다양한 지식들을 정리한다.
 
 - [Java Serialization 개념 정리](https://ryan-han.com/post/java/serialization/)
   - `실무 사용 조언` 내용이 눈에 들어와 좌표를 남겨둔다.
+
+<br>
+
+# ORM
+
+- [ORM](/back%20end/orm/orm/)
+- [JPA](/back%20end/java/jpa/jpa/)
