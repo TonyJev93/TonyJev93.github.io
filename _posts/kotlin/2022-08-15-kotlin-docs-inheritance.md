@@ -141,7 +141,7 @@ class Polygon : Shape {
 
 # Derived class initialization order
 
-자식 클래스의 새로운 인스턴스의 생성자내에서 부모 클래스의 초기화가 첫 단계로 수행된다.(부모 클래스 생성자의 인자값 평가)
+자식 클래스의 신규 인스턴스 생성시 부모 클래스의 초기화가 제일 먼저 수행된다.
 
 ```kotlin
 open class Base(val name: String) {
@@ -190,7 +190,7 @@ fun main() {
 
 # Calling the superclass implementation
 
-자식 클래스의 코드는 `super` 키워드를 통 부모 클래스의 함수와 속성 접근 구현체(get or set)를 호출할 수 있다.
+자식 클래스의 코드는 `super` 키워드를 통해 부모 클래스의 함수와 속성 접근 구현체(get or set)를 호출할 수 있다.
 
 ```kotlin
 open class Rectangle {
@@ -208,7 +208,7 @@ class FilledRectangle : Rectangle() {
 }
 ```
 
-`내부 클래스(inner class)`에서 `바깥 클래스(outer class)`의 `부모 클래스(super class)`로의 접근은 `바깥 클래스(outer class)`의 이름으로 제한된(qualified) `super` 키워드를 사용하므로써 가능하다.
+`내부 클래스(inner class)`에서 `외부 클래스(outer class)`의 `부모 클래스(super class)`로의 접근은 `외부 클래스(outer class)`의 이름으로 제한된(qualified) `super` 키워드를 사용하므로써 가능하다.
 
 ```kotlin
 open class Rectangle {
@@ -250,10 +250,6 @@ fun main() {
 코틀린에서의 구현(implementation) 상속은 아래와 같은 규칙을 따른다.
 
 만약 다중 부모 클래스를 상속 받고 있는데 부모간에 이름이 겹치는 맴버를 가지고 있다면, 해당 맴버에 대해서는 반드시 본인 고유의 구현을 갖도록 오버라이딩 해야 한다.(대부분 상속받은 부모 클래스 중 하나를 그대로 가져다 사용한다.)
-
-To denote the supertype from which the inherited implementation is taken, use super qualified by the supertype name in angle brackets, such as super<Base>:
-
-상속된 구현을 가져오는 상위 유형을 나타내려면 super<Base>와 같이 꺾쇠 괄호 안에 상위 유형 이름으로 수퍼 정규화를 사용하십시오
 
 상속된 구현을 선택적으로 가져오기 위해서는 `super<Base>`와 같이 사용하면 된다.
 
