@@ -69,13 +69,15 @@ toc_label: "목차"
 
 나중에 변상하지 않기 위함
 
-# 자취방 청소
+<br>
+
+# 자취방 청소하기
 
 입주 후 입주청소를 했다 해도 사실상 완벽하게 청소가 되어있다고 볼 수 없다.
 
 바닥, 세탁기, 가스레인지 등 확인해볼 곳이 많다. 각각 청소하는 방법에 대해 정리해 보겠다...
 
-## [가스레인지](https://www.youtube.com/watch?v=ks9w4fGbjZU)
+## [가스레인지 청소](https://www.youtube.com/watch?v=ks9w4fGbjZU)
 
 ### 바닥
 
@@ -99,7 +101,7 @@ toc_label: "목차"
 
 남은 부분은 매직블럭으로 마무리 하고 가스레인지 밑바닥을 마른수건으로 닦아준다.
 
-## [세탁기](https://www.youtube.com/watch?v=GfIsZokvW4M)
+## [세탁기 청소](https://www.youtube.com/watch?v=GfIsZokvW4M)
 
 1. 세탁 설정: `표준 - 온수 - 물살(강) - Only 세탁 모드 - 물높이 가득`
 2. 거름망 세척
