@@ -162,8 +162,6 @@ data class Counter(val dayIndex: Int) {
 
 ## 증강 할당(Augmented assignments)
 
-?? 뭐라는건지 모르겠음...
-
 | Expression | Translated to    |  
 |------------|------------------|
 | a += b     | a.plusAssign(b)  |
