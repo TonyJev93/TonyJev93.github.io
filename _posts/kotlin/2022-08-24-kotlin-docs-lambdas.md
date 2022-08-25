@@ -385,7 +385,6 @@ val sum: Int.(Int) -> Int = { other -> plus(other) }
 val sum = fun Int.(other: Int): Int = this + other
 ```
 
-Lambda expressions can be used as function literals with receiver when the receiver type can be inferred from the context. One of the most important examples of their usage is type-safe builders:
 문맥상 receiver 타입을 유추할 수 있는 경우 Lambda 표현식을 receiver와 함께 함수 리터럴로 사용할 수 있다. 
 
 사용의 가장 중요한 예 중 하나는 `type-saf builder`이다.
