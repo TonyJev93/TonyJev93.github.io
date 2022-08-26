@@ -113,7 +113,7 @@ val onClick: () -> Unit = ...
 ### [일시 중단 함수(Suspending function)](https://kotlinlang.org/docs/coroutines-basics.html#extract-function-refactoring) 표기법
 
 - 표기법: `suspend () -> Unit` 또는 `suspend A.(B) -> C`
-  -`suspend` 수정자 사용
+  - `suspend` 수정자 사용
 
 ## 함수 타입 인스턴스화(Instantiating a function type)
 
