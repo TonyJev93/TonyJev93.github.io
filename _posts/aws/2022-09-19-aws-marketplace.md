@@ -39,13 +39,9 @@ Java SDK 사용 `ResolveCustomer` 호출
 
 (Java SDK 를 통해) 구독시 전달 된 토큰으로 부터 유저 정보를 획득하기 위해, ResolveCustomer 를 호출하는데, assume-role을 통해 iam role에 부여된 권한을 사용하여 접속 할 client 객체 생성, 이후에 ResolveCustomer 를 호출해야 함
 
-assume-role 획득 예시
+[assume-role 획득 예시](https://docs.aws.amazon.com/ko_kr/AmazonS3/latest/userguide/AuthUsingTempSessionToken.html)
 
-- https://docs.aws.amazon.com/ko_kr/AmazonS3/latest/userguide/AuthUsingTempSessionToken.html
-
-ResolveCustomer API
-
-- https://docs.aws.amazon.com/ko_kr/marketplace/latest/userguide/saas-code-examples.html
+[ResolveCustomer API](https://docs.aws.amazon.com/ko_kr/marketplace/latest/userguide/saas-code-examples.html)
 
 호출 예시
 
@@ -72,6 +68,7 @@ AWS SQS
         * ![image](https://user-images.githubusercontent.com/53864640/192408116-8cc06ef0-17ab-40e6-a951-16d59c667c22.png)
             * SQS 를 통해 구독 성공/실패/취소 등에 대한 event 를 감지하여 우리쪽에서 권한을 처리하는 것으로 보임.
             * `subscribe-success` 알림 받기 전에는 사용자에게 권한을 부여하지 않도록 주의한다. (`subscribe-success`알림 받기 전에는 어차피 미터링 되지 않음)
+
 # 용어
 
 * AWS STS : AWS Security Token Service ([Git example](https://github.com/awsdocs/aws-doc-sdk-examples/tree/main/gov2/sts))
