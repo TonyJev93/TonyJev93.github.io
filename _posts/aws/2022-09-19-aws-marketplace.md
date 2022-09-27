@@ -30,7 +30,7 @@ AWS 마켓 플레이스 관련 API 사용을 위해 `access key` 발급 필요.(
 구독 후 우리 서버로 토큰(`x-amzn-marketplace-token`) 전달 됨.
 
 ```
-x-amzn-marketplace-token=MEsdCCtvXJKpRzzEqpYnD0D5Ug5UHnHxKULmo90TJE82xbLS9DXUpsomvGe97y3vUrUotBdIMGeC53CP2o32OX00G9cZSUynRA54od6hBAIs4A%2BgOxAPCU1jRZl9U8lecqpPvytXOlmvaq5gbj88OgCkU7Srykx9NpgMxTQWEEW3wJLkxzgyLw%3D%3D
+x-amzn-marketplace-token=............
 ```
 
 - 유저 정보 확인
@@ -50,9 +50,9 @@ ResolveCustomer API
 호출 예시
 
 ```
-access-key-id: AKIAVM7AC7IQH7K2JTUA
+access-key-id: ...
 secret-access-key: ...
-role-arn: arn:aws:iam::434519024304:role/NHNMarketPlaceAccessRole
+role-arn: arn:aws:iam::...:role/...
 ```
 
 AWS SQS
