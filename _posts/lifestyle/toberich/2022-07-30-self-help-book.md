@@ -31,7 +31,12 @@ toc: false
 | [JUST. KEEP. BUYING.](http://www.yes24.com/Product/Goods/113416787) | 투자 수익을 높이는 방법은 그냥 계속해서 사는 것이다.               | 완독(22. 11. 01.) |
 | [레이어드의 미국주식투자 원칙](http://www.yes24.com/Product/Goods/95727714)      | 레이어드 라는 개인 투자자의 투자 원칙을 다루는 책. 테슬라에 투자하게 된 계기 | 완독(22. 11. 06.) |
 | [부자의 그릇](http://www.yes24.com/Product/Goods/96087459)               | 다룰 수 있는 돈의 크기를 키우는 방법                        | 완독(22. 11. 08.) |
+| [부자 아빠, 가난한 아빠](http://www.yes24.com/Product/Goods/58774995)        | 부자 아빠와 가난한 아빠 사이에서 습득한 부자되는 방법. 금융지식을 키워라.   | 완독(22. 12. 03.) |
 | [그릿](http://www.yes24.com/Product/Goods/32616060)                   | 노력을 위한 노력. 노력하기 위한 공략법.                      |       진행중       |             
 | [데일 카네기 인간관계론](http://www.yes24.com/Product/Goods/79297023)         | 성공한 사람은 인간을 다룰줄 안다. 인간관계 공략법을 알아보자.          |       진행중       |
 | [데일 카네기 자기관리론](http://www.yes24.com/Product/Goods/96794060)         |                                              |        -        |
 | [세이노의 가르침](http://item.gmarket.co.kr/Item?goodscode=2301637852)     |                                              |        -        |             
+| [레버리지](http://www.yes24.com/Product/Goods/74208134)                 |                                              |        -        |             
+| [원씽](http://www.yes24.com/Product/Goods/9349031)                    |                                              |        -        |             
+| [The Secret](http://www.yes24.com/Product/Goods/2599166)            |                                              |        -        |             
+| [웰씽킹](http://www.yes24.com/Product/Goods/104866527)                 |                                              |        -        |             
