@@ -1,5 +1,5 @@
 ---
-title: "[Lifestyle] 독서법"
+title: "[Lifestyle] 속독법"
 last_modified_at: 2022-08-16T21:00:00+09:00
 categories:
     - Lifestyle
@@ -12,7 +12,7 @@ toc_sticky: true
 toc_label: "목차"
 ---
 
-독서법 : 효율적인 독서를 위한 방법 정리
+독서법 : 빠른 독서를 위한 방법 정리
 {: .notice--info}
 
 # [마지막 몰입](https://link.coupang.com/a/lCqPe)
