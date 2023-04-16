@@ -12,17 +12,16 @@ toc_sticky: true
 toc_label: "목차"
 ---
 
-Svelte : Svelte를 알아보기 위해 필요한 것들을 같이 알아보는 파헤치기를 한 번 해볼까 한다. 관련 내용들을 두서 없이 정처 없이 써내려갈 것이다. 
+Svelte : Svelte와 관련된 것들을 알아보기 위해 한 번 파헤처 볼까 한다. 관련 내용들을 두서 없이 써내려갈 것이다. 
 {: .notice--info}
 
-# 의식의 흐름
+# 작성 목적
 
-이 포스트를 작성하면서 내가 **알고자 하는 것과 얻어 내야 하는 것**이 무엇인지 의식의 흐름대로 작성해본다.<br/>
-먼저, Svelte가 FE 프레임워크인 것은 알고 있다. 인기가 많아지고 있는 추세다 정도도 알고 있다.<br/>
-그럼 과연 얼마나 인기가 많아지고 있는지 그 **추세**와 다른 FE 프레임워크랑 뭐가 다르기에 인기가 많아지고 있는지 그 **특징**을 알아봐야 할 것 같다.<br/>
-**빌드 툴은 무엇**을 쓰고 있으며 **데코레이션 기능을 사용 할 수 있는지**도 확인 해보자.<br/>
-그 전에 **빌드 툴을 왜 알아야 하는지 각각의 차이점**도 확인해보고 **데코레이션의 원리**도 파악해보자.<br/>
-마지막으로 Svelte를 꼭 써야만 하는 이유 단 한 가지를 알아내보자. **"Svelte는 OOO 때문에 써야 한다."** 라는 문장을 이 글의 마지막에 완성시켜보자.<br/>
+이 글을 통해 **알고자 하는 것과 얻어 내야 하는 것**이 무엇인지 파악한다.<br/><br/>
+Svelte 라는 FE 프레임워크가 왜 인기가 많아지고 있는지 그 **추세**에 대해 살펴보고 **특징**을 알아낸다.<br/><br/>
+**빌드 툴은 무엇**을 사용하며, **데코레이터 기능을 사용 할 수 있는지**도 확인 해보자.<br/>
+마지막으로 Svelte를 꼭 써야만 하는 이유 단 한 가지를 알아내보자.<br/><br/>
+**"Svelte는 OOO 때문에 써야 한다."** 라는 문장을 이 글의 마지막에 완성시켜보자.<br/>
 아마 완성시키지 못할 수도 있다.(꼭 써야할 이유를 못찾는다면.)
 {: .notice--success}
 
@@ -178,6 +177,49 @@ class App extends SvelteComponent {
 - 이를 위한 `변경 사항 추적 시스템` 사용
 
 ## 5. 상태 관리
+
+- 컴포넌트 내부에 상태 변수 선언하여 처리(로컬 상태 관리)
+- export 를 통해 외부에서 접근 가능한 속성으로 만들 수 있음
+
+```javascript
+<script>
+  export let count = 0;
+
+  function handleClick() {
+    count += 1;
+  }
+</script>
+
+<button on:click={handleClick}>
+  Clicked {count} {count === 1 ? 'time' : 'times'}
+</button>
+```
+
+- Store 기능 사용(전역 상태 관리)
+
+```javascript
+<!-- store.js -->
+<script>
+  import { writable } from 'svelte/store';
+
+  export const count = writable(0);
+</script>
+```
+
+```html
+<!-- Counter.svelte -->
+<script>
+  import { count } from './store.js';
+
+  function handleClick() {
+    count.update(n => n + 1);
+  }
+</script>
+
+<button on:click={handleClick}>
+  Clicked {$count} {$count === 1 ? 'time' : 'times'}
+</button>
+```
 
 # 컴파일러
 
@@ -373,6 +415,7 @@ example.greet(123); // throws Error: Invalid argument type: 123
 Svelte 는 **컴팩트한 프레임워크**이다.
 
 컴팩트한 프레임워크
-: 작고 가벼운 프레임워크. React, Vue와 비교할 때 코드 양이 적고 빌드된 파일의 크기가 작아서 작은 규모의 애플리케이션 개발에 적합
+: 작고 가벼운 프레임워크
+: React, Vue와 비교할 때 코드 양이 적고 빌드된 파일의 크기가 작아서 작은 규모의 애플리케이션 개발에 적합
 
 Svelte는 높은 성능과 간결한 코드 작성을 지원하여, 더 적은 코드로 더 높은 성능을 구현할 수 있도록 한다.
