@@ -49,3 +49,39 @@ About : 저에 대해 소개드립니다. :)
     - 내용 : NHN Academy 에서 모집한 부트캠프 수강생들의 결제를 지원하는 브릿지 서버 개발
     - 역할 : 설계, 서버개발, 어드민개발
     - 사용 기술 : Vue.js, Spring Boot, MSA, JPA, Querydsl, JUnit/Spock, MySQL, Docker, Jenkins
+
+### make IT 2022 웹 사이트 개발
+
+- 내용 : NHN Cloud의 기술 및 서비스를 공유하는 대규모 행사를 위한 웹 사이트 개발
+- 참여 기간 : 22. 04. ~ 22. 07.
+- 부서 : NHN SOFT, 서비스 개발팀
+- 참여 인원 : 8 명
+- 설명
+  - 내용 : 
+  - 역할 : 설계, 웹사이트 FE 개발
+  - 사용 기술 : React.js
+  - 성과 : React.js
+
+### AI Fashion for AWS
+
+- 내용 : NHN Cloud 상품인 AI Fashion을 AWS Marketplace에 등록 및 연계하는 프로젝트
+- 참여 기간 : 22. 10. ~ 23. 02.
+- 부서 : NHN Cloud, 서비스개발팀
+- 참여 인원 : 2 명
+- 설명
+  - 내용 : 
+  - 역할 : 설계, FE/BE 개발, CI/CD
+  - 사용 기술 : Spring Boot, Vue.js 3.0
+  - 성과 : 
+
+### make IT 2023 웹 사이트 개발
+
+- 내용 : NHN Cloud의 기술 및 서비스를 공유하는 대규모 행사를 위한 웹 사이트 개발
+- 참여 기간 : 23. 03. ~ 23. 05.
+- 부서 : NHN Cloud, 서비스개발팀
+- 참여 인원 : 1 명
+- 설명
+  - 내용 :
+  - 역할 : 설계, 웹사이트 FE 개발
+  - 사용 기술 : React.js
+  - 성과 : React.js
