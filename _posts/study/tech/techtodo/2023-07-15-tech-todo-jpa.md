@@ -121,5 +121,18 @@ getTargetRepository는 JpaRepositoryImplementation 을 반환하고 이를 Proxy
 
 ## 코드 레벨에서의 지식
 
+### [@Transactional](https://kafcamus.tistory.com/30)
+
+> readOnly
+
+- defalut = false
+- readOnly = true 설정 : 스프링은 해당 트랜잭션의 FlushMode를 NEVER로 설정
+  - 이 경우 flush가 일어나지 않으므로 비용이 절감되며, 또한 생성/수정/삭제가 일어나지 않으므로 별도의 스냅샷을 만들 필요가 없어 성능상 이점이 생긴다.
+
+### [@Transactional & Lazy Loading](https://kafcamus.tistory.com/31)
+
+### [@Transactional isolation & propagation](https://kafcamus.tistory.com/33)
+
+### [JPA Lock](https://velog.io/@recordsbeat/JPA%EC%97%90%EC%84%9C-Write-Skew-%EB%B0%A9%EC%A7%80%ED%95%98%EA%B8%B0-locking-%EC%A0%84%EB%9E%B5)
 
 ## 실무 적용 및 운영 주의사항
