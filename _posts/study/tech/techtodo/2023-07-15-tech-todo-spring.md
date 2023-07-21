@@ -6,7 +6,7 @@ categories:
 tags:
     - Study
     - 기술 부채
-    - redis
+    - Spring
 toc: true
 toc_sticky: true
 toc_label: "목차"
@@ -20,6 +20,8 @@ Study : 내가 부족한 기술(Spring)에 대해 정리한다.
 스프링에서 빈을 등록할 때 사용되는 패턴
 
 한 번 생성 해둔 객체를 에플리케이션 종료시 까지 사용하는 패턴
+
+- [생성 방법](https://www.techiedelight.com/ko/implement-singleton-pattern-in-java/)
 
 ## 단점
 

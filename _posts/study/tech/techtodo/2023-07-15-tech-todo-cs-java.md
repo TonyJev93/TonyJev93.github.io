@@ -22,6 +22,39 @@ Study : 내가 부족한 기술(CS - JAVA)에 대해 정리한다.
 - JVM 사용을 통한 운영체제 독립적으로 실행가능
 - GC에 의해 자동으로 메모리 관리가 가능
 
+## JAVA 버전별 특징
+
+LTS 기준으로 정리 해보자.
+
+### Java 8
+
+- Lambda
+- Stream
+- Optional
+- LocalDateTime
+- Interface default method
+- Parallel GC(default)
+- 공식 지원 기간이 제일 김 (~2030년)
+
+### Java 11
+
+- Oracle JDK가 구독형 유료 모델로 전환
+- var
+- G1GC(Java 9+ default)
+- Lambda에 var 사용 가능
+
+### Java 17
+
+- 확장된 Switch 문
+- 멀티 스트링
+- record
+- NPE 에러 개선
+- ZGC(Java 15) 등장
+- M1 지원
+- Sealed Classes
+- 패턴 매칭 지원
+- 공식 지원 나름 김(~2029년)
+
 # JVM
 
 - 역할
@@ -240,6 +273,141 @@ young 영역에 대한 minor GC, old 영역에 대한 major GC 로 구분
 
 - @SuppressWarnings
   -  컴파일러에게 특정 경고를 무시하도록 지시하는 역할
+
+# 제네릭
+
+- Java 5 등장
+- 컴파일 시 강한 타입 체크
+  - 런타임 시 발견될 수 있는 잘못된 타입의 사용 문제를 컴파일 시점에 발견하여 런타임 에러를 방지하기 위함
+
+```java
+// List Integer 타입으로 제네릭 타입 적용
+List<Integer> list = new ArrayList();
+list.add(1);
+list.add("5"); // ERROR java: incompatible types: java.lang.String cannot be converted to java.lang.Integer
+```
+
+- 불필요한 타입 변환 제거
+
+```java
+List list = new ArrayList();
+list.add(1);
+
+// 강제 형 변환 필요 
+Integer number = (Integer) list.get(0);
+```
+
+# [Stream](https://zangzangs.tistory.com/171)
+
+![image](https://github.com/TonyJev93/Study/assets/53864640/71de2100-f7c7-4cc7-8775-514a2470af74)
+
+컬렉션, 배열 등에 저장된 요소들을 하나씩 참조하면서 코드를 실행할 수 있는 기능
+
+- 특징
+  - Stream은 데이터를 담는 저장소는 아니다. 
+  - Stream은 데이터를 변경하지 않는다.
+  - Stream은 재사용할 수 없다.
+  - Stream은 각 요소가 1번씩 처리된다.
+  - Stream은 무제한일 수도 있다. (실시간으로 계속 들어올 수 있음)
+- ParallelStream
+  - 데이터 병렬 처리
+  - 대용량 데이터의 경우 성능이 뛰어남
+  - Thread Pool을 사용하는 것이 아닌 Thread Pool 1개를 모든 ParallelStream에서 공유하는 구조
+  - (주의) db, http 요청과 같은 코드를 실행하면 병목 발생
+
+멀티스레드 코드를 구현하지 않아도 데이터를 투명하게 병렬로 처리할 수 있다.
+
+- 명령형 vs **함수형**
+  - 명령형 : 무엇을 **어떻게** 해
+  - 함수형 : **무엇을** 해
+- 파이프 라이닝 : 부분 스트림 연산은 스트림 연산끼리 연결해서 커다란 파이프 라인을 구성할 수 있도록 스트림 자신을 반환
+  - layziness(게으름) : 최종연산이 실행되기 전까지 **중간연산(filter, sorted, map, ..)이 실행되지 않는 것**
+  - short-circuiting(쇼트서킷) : 여러 개의 조건이 중첩된 상황에서 **값이 결정 나면 더 이상 불필요한 실행을 하지 않도록** 하여 실행 속도를 올리는 기법
+- 내부 반복 : 리스트의 반복자 사용과 달리 자체적으로 내부 반복 지원
+
+> vs 컬렉션
+
+- 컬렉션
+  - DVD 처럼 모든 데이터를 불러온 상태에서 연산을 수행
+  - 외부 반복(for each)
+- 스트림
+  - 스트리밍 서비스, 필요 부분만 불러와서 수행
+  - 내부 반복
+
+> 내부 반복자
+
+개발자는 요소 처리 코드에만 집중
+
+멀티코어 CPU를 최대한 활용하기 위해 요소들을 분배시켜 병렬 처리 작업을 할 수 있다.
+
+한가지 작업을 서브 작업으로 나누고, 서브 작업들을 분리된 스레드에서 병렬적으로 처리한 후, 서브 작업들의 결과들을 최종 결합하는 방법(자바는 ForkJoinPool 프레임워크를 이용해서 병렬 처리)
+
+- [ForkJoinPool 프레임 워크](https://ict-nroo.tistory.com/43) 
+  - 포크 : 데이터를 서브 데이터로 반복적으로 나누고 멀티 코어에서 서브 데이터를 병렬로 처리
+  - 조인 : 서브 결과 결합하여 최종 결과 생성
+
+![image](https://github.com/TonyJev93/Study/assets/53864640/6b3c1ab6-dcab-4c91-b2c2-ed3d24db8994)
+
+- 포크조인풀
+  - 각 코어 별 서브 요소를 처리하는 것은 개별 스레드가 해야하기 때문에 스레드 관리 필요
+  - ForkJoinPool 프레임 워크는 ExecutorService의 구현 객체인 ForkJoinPool을 사용해서 작업 스레드를 관리
+
+> 병렬 처리 성능
+
+항상 병렬 처리가 빠른 것은 아님
+
+- 병렬 처리 미치는 3가자ㅣ 요인
+  - 요소의 수와 요소당 처리 시간
+    - 스레드 풀 생성, 스래드 생성이라는 추가 비용으로 인해 적은 양에 대한 처리는 순차가 빠름
+  - 스트림 소스의 종류
+    - ArrayList, 배열은 랜덤 엑세스 지원(인덱스 접근) 해서 포크단계 빠름
+    - HashSet, TreeSet은 요소를 분리하기가 쉽지 않고, LinkedList는 랜덤 액세스를 지원하지 않아 링크를 따라가야 하므로 역시 요소를 분리하기가 쉽지않음
+  - 코어(Core)의 수
+    - 싱글코어는 순차처리가 더 빠름 -> 병렬 시 스레드수만 증가하고 번갈아 수행됨
+    - 코어수가 많을수록 병렬 처리 빠름
+
+> 스트림 연산
+
+중간연산, 최종연산으로 나뉨
+
+- 중간연산
+  - 요소들의 매핑, 필터링, 정렬
+  - 다른 스트림을 반환 -> 중간연산을 연결하여 질의를 만들 수 있음 = 루프 퓨전
+  - Lazy : 단말 연산 실행 전까지 아무 연산도 수행하지 않음 
+- 최종연산
+  - 반복, 카운트, 평균, 총합
+  - 스트림 파이프라인에서 최종 결과를 도출
+  - List, Integer, void 등 스트림 이외의 결과 반환
+
+```java
+scores.stream()
+    .filter(g -> {
+        System.out.println("filter 연산 : " + g.toString());
+        return g.getGrade().equals(GRADE.GRADE4);
+    })
+    .map(m -> {
+        System.out.println("map 연산  : " + m.toString());
+        return m.getMath();
+    })
+    .limit(2)
+    .forEach(System.out::println);
+```
+
+ 중간 연산인 filter, map이 한 과정으로 병합(루프 퓨전)하여 Lazy 특성을 이용해 단말 연산 limit을 만나는 순간 수행.
+
+forEach는 void 반환하는 최종 연산.
+
+> [스트림 종류](https://ict-nroo.tistory.com/43)
+
+자바 8 부터 java.util.stream 패키지에서 인터페이스 타입으로 제공
+
+- BaseStream : 모든 스트림에서 사용할 수 있는 공통 메소드들이 정의
+  - Stream 
+  - IntStream
+  - LongStream 
+  - DoubleStream
+
+
 
 # 참고
 

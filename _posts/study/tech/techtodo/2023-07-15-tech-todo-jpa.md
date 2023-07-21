@@ -17,8 +17,26 @@ Study : 내가 부족한 기술(JPA)에 대해 정리한다.
 
 # JPA 파헤치기
 
+## JDBC
+
+- 자바 프로그래밍 언어와 다양한 데이터베이스 SQL 또는 테이블 형태의 데이터 사이에 독립적인 연결을 지원하는 표준(DB 작업을 위한 표준)
+- DBMS 회사들이 JDBC 인터페이스를 구현하여 제공(= JDBC 드라이버)
+
+
+## ORM
+
+- Object Relational Mapping
+- 객체와 데이터베이스의 관계를 매핑해주는 도구
+
+## 하이버네이트
+
+- Java 언어를 위한 ORM 프레임워크
+- JPA의 구현체
+
 ## JPA 란?
  
+- 관계형 데이터베이스와 객체의 패러다임 불일치 문제를 해결
+- 자바 애플리케이션에서 관계형 데이터베이스를 사용하는 방식을 정의한 **인터페이스**
 - 데이터 접근 레이어를 편하게 구현할 수 있도록 지원하는 프레임워크 
 - RDB 활용 시 널리 사용
 - 하이버네이트의 기능을 스프링 프레임워크에 맞게 확장한 모듈(= 기본적 구조와 동작은 하이버네이트 구현을 기반으로 함)
@@ -136,3 +154,82 @@ getTargetRepository는 JpaRepositoryImplementation 을 반환하고 이를 Proxy
 ### [JPA Lock](https://velog.io/@recordsbeat/JPA%EC%97%90%EC%84%9C-Write-Skew-%EB%B0%A9%EC%A7%80%ED%95%98%EA%B8%B0-locking-%EC%A0%84%EB%9E%B5)
 
 ## 실무 적용 및 운영 주의사항
+
+### N+1
+
+- 즉시로딩
+  - JPA 기본 반찬 사용 시 문제는 없음. 쿼리 수행 시 내부적으로 join을 통해서 한번에 가져옴.
+  - JPQL 사용 시 문제가 발생. 부모를 조회 했는데 eager 에 의해 자식도 다 조회해오는 사태 발생.
+- 지연로딩
+  - 최초에 가져올 때만 문제없는듯 보이지만 결국 자식을 호출하는 순간 캐싱된 프록시 객체에 의해 즉시로딩과 동일해짐
+- fetch join (with. 지연로딩)
+  - 지연 로딩이 걸려있는 관계에 대해 한번에 즉시로딩 해주는 구문
+  - fetch join 없이 jpql로 join 했을 경우 > 지연로딩과 동일
+  - 즉시로딩과 함께 사용 불가
+    - 둘은 동일한 쿼리 실행 전략을 가지고 있어 JPA가 둘 중 어떤 전략을 선택할지 혼란을 가짐
+    - 즉시로딩 : 영속성 컨텍스트가 엔티티를 즉시로딩 하도록 하는 설정. 1을 조회한 후 N개에 대해 영속성 컨텍스트가 쿼리를 수행
+    - fetch join : 명시적으로 특정 연관 관계 로딩 시 사용. 연관된 엔티티 즉시 로딩
+
+```java
+@Query("select distinct u from User u left join fetch u.articles")
+List<User> findAllJPQLFetch();
+```
+
+- @EntityGraph
+  - fetch join 시 하드코딩하는 단점 존재
+
+```java
+@EntityGraph(attributePaths = {"articles"}, type = EntityGraphType.FETCH)
+@Query("select distinct u from User u left join u.articles")
+List<User> findAllEntityGraph();
+```
+
+- fetch join 주의할 점
+  - Pagination 사용 시
+    - `WARN --- [    Test worker] o.h.h.internal.ast.QueryTranslatorImpl   : HHH000104: firstResult/maxResults specified with collection fetch; applying in memory!`
+    - 쿼리 수행 전 인메모리를 이용하여 조인을 하였다는 경고 문구가 발생 -> 모든 데이터 조회 후 메모리에서 페이징 처리, OOM 원인
+    - 이유 : fetch join 시 distinct를 사용하기 때문에 쿼리문에 Limit, Offset 이 적용 안됨.(그치만 응답은 적용이 된 결과를 받음)
+    - 해결책1 : ToOne 관계에서 페이징 사용
+
+```java
+@EntityGraph(attributePaths = {"user"}, type = EntityGraphType.FETCH)
+@Query("select a from Article a left join a.user")
+Page<Article> findAllPage(Pageable pageable);
+```
+
+이렇게 하면 ManyToOne 관계로 limit을 걸어서 가져옴
+
+- Pagination 해결책 2 : Batch Size 사용
+
+```java
+Page<User> findAll(Pageable pageable);
+``` 
+
+```java
+// User.java
+@BatchSize(size = 100)
+@OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+private Set<Article> articles = emptySet();
+```
+
+이제 findAll() 쿼리 수행 시 limit 포함됨. 근데 article에 대한 select 쿼리가 추가적으로 수행 됨.
+
+이유는 지연로딩으로 Batch성 로딩을 하게 된 것. 그때 마다 쿼리를 날리는 N+1이 아니라 조회할 대상을 배치로 묶어서 한번에 쿼리를 수행
+
+단점으로는 최적화된 Batch Size를 구하기 어렵고 where에서 in 구문을 이용하기 때문에 1000개 이상의 데이터 조회가 어렵
+
+- 해결책 3 : @Fetch(FetchMode.SUBSELECT)
+
+```java
+// User.java
+@Fetch(FetchMode.SUBSELECT)
+@OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+private Set<Article> articles = emptySet();
+```
+
+where 문에 in을 통해 user를 전체 조회하도록 쿼리가 작성 됨. 이는 모든 유저를 가져온다는 뜻으로 성능상 좋지 않음.
+
+- 문제 2 : 2개 이상의 Collection Fetch join(~ToMany) 불가능
+
+> [결론](https://velog.io/@jinyoungchoi95/JPA-%EB%AA%A8%EB%93%A0-N1-%EB%B0%9C%EC%83%9D-%EC%BC%80%EC%9D%B4%EC%8A%A4%EA%B3%BC-%ED%95%B4%EA%B2%B0%EC%B1%85#%EA%B2%B0%EB%A1%A0) - 이글 보면 됩니다.
+
