@@ -348,3 +348,26 @@ kmalloc-8                 14336  14336      8    512
 > 결론
 
 Sorted Set의 skip list의 경우 **관리용 메모리 오버헤드**와 **리눅스 커널 메모리 할당 방식**에 따른 **오버헤드를 합쳐**서 **실제 값의 몇 배를 사용할 수 있다는 것을 인지하고 사용**해야 한다.
+
+
+# [Jedis vs Lettuce](https://jojoldu.tistory.com/418)
+
+결론, Lettuce를 쓰자.
+
+- 주요 특징
+  - Lettuce
+    - Netty 기반 
+    - 비동기 이벤트 기반 고성능 네트워크 프레임워크
+    - spring-data-redis 포함되어있음
+  - Jedis
+    - 경량
+    - 사용 쉬움
+    - 동기 방식 클러스터 지원
+
+- 성능 비교
+  - Jedis
+    - 동기 방식으로 Connection Pool 설정해주어야 성능이 잘 나옴.
+    - Redis CPU 사용량이 높음 
+  - Lettuce
+    - 비동기 방식으로 커넥션을 많이 안잡음
+    - Redis CPU 사용량이 낮음

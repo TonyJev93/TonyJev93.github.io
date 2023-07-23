@@ -22,6 +22,19 @@ Study : 내가 부족한 기술(Spring)에 대해 정리한다.
 한 번 생성 해둔 객체를 에플리케이션 종료시 까지 사용하는 패턴
 
 - [생성 방법](https://www.techiedelight.com/ko/implement-singleton-pattern-in-java/)
+  1. 기본 생성자 감추기 
+    - private SingleTon(){};
+    - static final INSTANCE = new SingleTon();
+    - public static SingleTon getInstance() {return INSTANCE;}
+  2. Lazy Loading
+    - private SingleTon(){if INSTANCE != null -> throw exception;};
+    - public static SingleTon getInstance() {if INSTANCE == null -> new SingleTon; return INSTANCE;}
+  3. Syncronized
+    - public static SingleTon getInstance() {if synchronized(SingleTon.class) {INSTANCE == null -> new SingleTon;} return INSTANCE;}
+  4. Serializable
+     - private Object readResolver() { return INSTANCE; }
+
+or Enum 사용
 
 ## 단점
 
