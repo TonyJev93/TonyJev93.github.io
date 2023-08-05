@@ -1,6 +1,6 @@
 ---
 title: "[Spring] Spring Security - CORS 해결하기"
-last_modified_at: 2022-07-27T23:50:00+09:00
+last_modified_at: 2023-08-04T23:50:00+09:00
 categories:
     - Back End
     - Spring
