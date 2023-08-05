@@ -66,7 +66,8 @@ Entity에 @Audited를 붙이면 이력관리를 위해 {Entity}_aud 라는 이�
 * application.properties
 
 `spring.jpa.hibernate.ddl-auto : create`
-  #**{Entity}_aud 테이블**
+ 
+#**{Entity}_aud 테이블**
 
 ![image](https://github.com/TonyJev93/Study/assets/53864640/fad7270e-4440-491b-91e3-7a52cb973d72)
 
