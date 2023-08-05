@@ -1,5 +1,5 @@
 ---
-title: "[Spring] Spring Security - CORS 해결하기"
+title: "[Spring] Spring Data Envers"
 last_modified_at: 2023-08-04T23:50:00+09:00
 categories:
     - Back End
@@ -14,7 +14,7 @@ toc_sticky: true
 toc_label: "목차"
 ---
 
-Spring : Spring Security 사용 시 CORS 문제를 해결하기 위한 방법을 정리하자. 
+Spring : Spring Data Envers 사용법과 주의사항에 대해 방법을 정리하자. 
 {: .notice--info}
 Spring Data Envers
 
